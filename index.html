@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recife Hub - Ônibus no Recife Antigo</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Glass Navbar -->
+    <nav class="glass-navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-bus-simple"></i>
+            </div>
+            <span class="brand-text">Recife Hub</span>
+        </div>
+
+        <div class="nav-center">
+            <div class="search-container">
+                <i class="fa-solid fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar rota de ônibus..." autocomplete="off">
+                <i class="fa-solid fa-times clear-search" id="clearSearchBtn" style="display: none;"></i>
+                
+                <div class="search-dropdown" id="searchDropdown">
+                    <div class="dropdown-header" id="dropdownHeader">Rotas Recentes</div>
+                    <ul class="dropdown-list" id="dropdownList">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <button class="icon-btn" id="profileBtn" title="Meu Perfil">
+                <i class="fa-regular fa-circle-user"></i>
+            </button>
+            <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Map Area -->
+    <main class="map-wrapper">
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Carregando malha viária do Recife Antigo...</p>
+        </div>
+        
+        <div id="map"></div>
+        
+        <div class="floating-controls">
+            <button id="resetMapBtn" class="floating-btn" title="Mostrar todas as rotas">
+                <i class="fa-solid fa-layer-group"></i> Visão Geral
+            </button>
+        </div>
+    </main>
+
+    <!-- Profile Modal (Glassmorphism overlay) -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Meu Perfil</h2>
+                <button class="close-btn" id="closeProfileBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="user-info-section">
+                    <div class="avatar-placeholder">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="info-inputs">
+                        <label for="userName">Nome</label>
+                        <input type="text" id="userName" placeholder="Como quer ser chamado?">
+                        <button class="save-btn" id="saveProfileBtn">Salvar</button>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <div class="history-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Histórico de Rotas</h3>
+                        <button class="text-btn danger" id="clearHistoryBtn">Limpar</button>
+                    </div>
+                    <div class="history-list-container">
+                        <ul class="history-list" id="profileHistoryList">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- App JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>
