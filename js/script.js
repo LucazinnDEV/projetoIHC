@@ -129,6 +129,10 @@ function resetMap() {
     highlightedLayerGroup.clearLayers();
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
+    if (currentFavoriteBtn){
+        currentFavoriteBtn.remove();
+        currentFavoriteBtn = null;
+    }
     map.setView(RECIFE_ANTIGO_COORDS, 15);
 }
 
