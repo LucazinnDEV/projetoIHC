@@ -71,45 +71,53 @@
     </main>
 
     <!-- Profile Modal (Glassmorphism overlay) -->
-    <div class="modal-body">
-
-        <!-- Abas -->
-        <div class="modal-tabs">
-            <button class="tab-btn active" data-tab="profile">Perfil</button>
-            <button class="tab-btn" data-tab="favorites">Favoritos</button>
-            <button class="tab-btn" data-tab="history">Histórico</button>
-        </div>
-    
-        <!-- Perfil -->
-        <div class="tab-content active" id="profileTab">
-            <div class="user-info-section">
-                <div class="avatar-placeholder">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="info-inputs">
-                    <label for="userName">Nome</label>
-                    <input type="text" id="userName" placeholder="Como se chama?">
-                    <button class="save-btn" id="saveProfileBtn">Salvar</button>
-                </div>
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Meu Perfil</h2>
+                <button class="close-btn" id="closeProfileBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-        </div>
-    
-        <!--Favoritos -->
-        <div class="tab-content" id="favoritesTab">
-            <ul class="favorites-list" id="favoritesList"></ul>
-        </div>
-    
-        <!-- Histórico -->
-        <div class="tab-content" id="historyTab">
-            <div class="history-section">
-                <div class="history-header">
-                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Histórico</h3>
-                    <button class="text-btn danger" id="clearHistoryBtn">Limpar</button>
+            
+            <div class="modal-body">
+                <!-- Abas -->
+                 <div class="modal-tabs">
+                    <button class="tab-btn active" data-tab="profile">Perfil</button>
+                    <button class="tab-btn" data-tab="favorites">Favoritos</button>
+                    <button class="tab-btn" data-tab="history">Histórico</button>
                 </div>
-                <ul class="history-list" id="profileHistoryList"></ul>
+    
+                 <!-- Perfil -->
+                <div class="tab-content active" id="profileTab">
+                    <div class="user-info-section">
+                        <div class="avatar-placeholder">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                         <div class="info-inputs">
+                             <label for="userName">Nome</label>
+                             <input type="text" id="userName" placeholder="Como se chama?">
+                             <button class="save-btn" id="saveProfileBtn">Salvar</button>
+                            </div>
+                         </div>
+                        </div>
+    
+                <!--Favoritos -->
+                <div class="tab-content" id="favoritesTab">
+                     <ul class="favorites-list" id="favoritesList"></ul>
+                     </div>
+    
+                 <!-- Histórico -->
+                  <div class="tab-content" id="historyTab">
+                    <div class="history-section">
+                        <div class="history-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Histórico</h3>
+                         <button class="text-btn danger" id="clearHistoryBtn">Limpar</button>
+                    </div>
+                    <ul class="history-list" id="profileHistoryList"></ul>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

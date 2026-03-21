@@ -331,7 +331,7 @@ function renderProfileHistory() {
     const isFav = isFavorite(route.id);
 
     currentFavoriteBtn = document.createElement('button');
-    currentFavoriteBtn.className = `favorite-btn ${isFav ? 'favorited' : ''}`;'}';
+    currentFavoriteBtn.className = `favorite-btn ${isFav ? 'favorited' : ''}`;
     currentFavoriteBtn.innerHTML = `<i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i> ${isFav ? 'Favoritado' : 'Favoritar'}`;
 
     currentFavoriteBtn.onclick = () => toggleFavorite(route);
@@ -397,11 +397,11 @@ function renderFavorites() {
                 <div class="route-color-dot" style="background:${fav.color}"></div>
                 <strong>${fav.name}</strong>
             </div>
-            </div>
-            <button class="view-favorite-btn">Ver</button>
-            <button class="remove-favbtn"style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 6px;">
-                <i class="fa-solid fa-trash"></i>
-            </button>
+            <div>
+                <button class="view-favorite-btn">Ver</button>
+                <button class="remove-fav-btn" style="background:none;border:none;color: #ef4444;cursor:pointer;padding:6px;">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </div>
          `;
          // botão ver
