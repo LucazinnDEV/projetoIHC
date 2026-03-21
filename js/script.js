@@ -47,7 +47,34 @@ async function loadData() {
         drawAllRoutes();
     } catch (error) {
         console.error("Error loading routes:", error);
-        document.getElementById('loadingOverlay').innerHTML = `<p style="color:red">Erro ao carregar dados. Verifique o servidor.</p>`;
+        
+        // estado de erro c botao retry
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.style.opacity = '1';
+        overlay.innerHTML = `
+            <div style="text-align:center; max-width:400px;">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size:4rem; color:#ef4444; margin-bottom:20px;"></i>
+                <h2 style="color:#1e293b; margin-bottom:12px; font-size:1.5rem;">Erro ao Carregar Rotas :(</h2>
+                <p style="color:#64748b; margin-bottom:30px; line-height:1.6;">
+                    Não foi possível conectar ao servidor. Verifique sua conexão ou tente novamente.
+                </p>
+                <button onclick="location.reload()" style="
+                    padding:14px 28px; 
+                    background:#4f46e5; 
+                    color:white; 
+                    border:none; 
+                    border-radius:12px; 
+                    font-weight:600; 
+                    font-size:1rem;
+                    cursor:pointer; 
+                    box-shadow:0 4px 12px rgba(79,70,229,0.3);
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='#4338ca'; this.style.transform='translateY(-2px)';" 
+                   onmouseout="this.style.background='#4f46e5'; this.style.transform='translateY(0)';">
+                    <i class="fa-solid fa-rotate-right"></i> Tentar Novamente
+                </button>
+            </div>
+        `;
     }
 }
 
