@@ -311,9 +311,12 @@ function renderProfileHistory() {
     if(currentFavoriteBtn){
         currentFavoriteBtn.remove();
     }
+    const isFav = isFavorite(route.id);
+
     currentFavoriteBtn = document.createElement('button');
-    currentFavoriteBtn.className = 'favorite-btn';
-    currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+    currentFavoriteBtn.className = `favorite-btn ${isFav ? 'favorited' : ''}`;'}';
+    currentFavoriteBtn.innerHTML = `<i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i> ${isFav ? 'Favoritado' : 'Favoritar'}`;
+
     currentFavoriteBtn.onclick = () => toggleFavorite(route);
 
     document.body.appendChild(currentFavoriteBtn);
