@@ -4,11 +4,13 @@ let map;
 let routeLayers = {};
 let allStopsLayer;
 let highlightedLayerGroup;
+let currentFavoriteBtn = null
 
 // Constants
 const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
 const STORAGE_KEY_HISTORY = 'recifeHub_history';
 const STORAGE_KEY_USER = 'recifeHub_user';
+const STORAGE_KEY_FAVORITES = 'recifeHub_favorites';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
@@ -116,6 +118,7 @@ function selectRoute(route) {
     map.fitBounds(polyline.getBounds().pad(0.1));
     
     addToHistory(route);
+    showFavoriteButton(route);
     closeSearchDropdown();
 }
 
@@ -301,4 +304,44 @@ function renderProfileHistory() {
         });
         historyList.appendChild(li);
     });
+}
+//favoritos
+
+    function showFavoriteButton(route){
+    if(currentFavoriteBtn){
+        currentFavoriteBtn.remove();
+    }
+    currentFavoriteBtn = document.createElement('button');
+    currentFavoriteBtn.className = 'favorite-btn';
+    currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+    currentFavoriteBtn.onclick = () => toggleFavorite(route);
+
+    document.body.appendChild(currentFavoriteBtn);
+}
+function getFavorites() {
+    const data = localStorage.getItem(STORAGE_KEY_FAVORITES);
+    return data ? JSON.parse(data) : [];
+}
+function isFavorite(routeId) {
+    const favorites = getFavorites();
+    return favorites.some(r => r.id === routeId);
+}
+function toggleFavorite(route) {
+    let favorites = getFavorites();
+    const idx = favorites.findIndex(r => r.id === route.id);
+
+    if (idx >= 0){
+        favorites.splice(idx,1);
+        currentFavoriteBtn.className = 'favorite-btn';
+        currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+    }else{
+        favorites.push({
+            id: route.id,
+            name: route.name,
+            color: route.color
+        });
+        currentFavoriteBtn.className = 'favorite-btn favorited';
+        currentFavoriteBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
+    }
+    localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favorites));
 }

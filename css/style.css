@@ -490,3 +490,27 @@ body {
     .mobile-menu-btn { display: flex; }
     .floating-controls { bottom: 20px; right: 20px; }
 }
+
+/* Botão de favoritar */
+.favorite-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: white; 
+    padding: 12px 20px; 
+    border-radius: 20px; 
+    border: 2px solid #fbbf24;
+    cursor: pointer;
+    display: flex;
+    gap: 8px; 
+    z-index: 1000;
+}
+.favorite-btn:hover {
+    background: #fbbf24; 
+    color: white; 
+    transform: translateY(-2px);    
+}
+.favorite-btn.favorited{
+    background: #fbbf24; 
+    color: white;
+}
