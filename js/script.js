@@ -397,17 +397,32 @@ function renderFavorites() {
                 <div class="route-color-dot" style="background:${fav.color}"></div>
                 <strong>${fav.name}</strong>
             </div>
+            </div>
             <button class="view-favorite-btn">Ver</button>
+            <button class="remove-favbtn"style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 6px;">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+            </div>
          `;
-            
-        li.querySelector('button').addEventListener('click', () => {
+         // botão ver
+         li.querySelector('.view-favorite-btn').addEventListener('click', () => {
             const route = busRoutes.find(r => r.id === fav.id);
             if (route) {
                 document.getElementById('profileModal').classList.remove('active');
                 selectRoute(route);
-            }
+                }
+            });
+        //botão remover
+        li.querySelector('.remove-fav-btn').addEventListener('click', () => {
+            let favs = getFavorites();
+            favs = favs.filter(f => f.id !== fav.id);
+            localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favs));
+            renderFavorites();
+            showToast('Favorito removido');
         });
             
         favoritesList.appendChild(li);
     });
 }
+
+       
