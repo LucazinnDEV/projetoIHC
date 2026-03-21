@@ -199,7 +199,21 @@ function initUI() {
         localStorage.removeItem(STORAGE_KEY_HISTORY);
         renderProfileHistory();
     });
-
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById(`${tab}Tab`).classList.add('active');
+                if(tab === 'favorites'){
+                    renderFavorites();  
+            }
+        });
+    });
+    
     // Mobile menu toggle
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
         document.querySelector('.nav-center').classList.toggle('active');
@@ -365,4 +379,36 @@ function showToast(message) {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
     }, 3000);
+}
+
+function renderFavorites() {
+    const favoritesList = document.getElementById('favoritesList');
+    const favorites = getFavorites();
+        
+      favoritesList.innerHTML = '';
+        
+    if (favorites.length === 0) {
+        favoritesList.innerHTML = '<li style="text-align:center;padding:40px;color:#94a3b8;">Nenhuma rota favoritada ainda</li>';
+        return;
+    }
+    favorites.forEach(fav => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div style="display:flex;gap:10px;align-items:center;">
+                <div class="route-color-dot" style="background:${fav.color}"></div>
+                <strong>${fav.name}</strong>
+            </div>
+            <button class="view-favorite-btn">Ver</button>
+         `;
+            
+        li.querySelector('button').addEventListener('click', () => {
+            const route = busRoutes.find(r => r.id === fav.id);
+            if (route) {
+                document.getElementById('profileModal').classList.remove('active');
+                selectRoute(route);
+            }
+        });
+            
+        favoritesList.appendChild(li);
+    });
 }
