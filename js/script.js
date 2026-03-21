@@ -419,6 +419,11 @@ function renderFavorites() {
             localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favs));
             renderFavorites();
             showToast('Favorito removido');
+
+            if(currentFavoriteBtn){
+                currentFavoriteBtn.className = 'favorite-btn';
+                currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+            }
         });
             
         favoritesList.appendChild(li);
