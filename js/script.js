@@ -337,7 +337,9 @@ function toggleFavorite(route) {
         favorites.splice(idx,1);
         currentFavoriteBtn.className = 'favorite-btn';
         currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+        showToast('Rota removida dos favoritos!!');
     }else{
+        showToast('Rota adicionada aos favoritos!!');
         favorites.push({
             id: route.id,
             name: route.name,
@@ -347,4 +349,16 @@ function toggleFavorite(route) {
         currentFavoriteBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
     }
     localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favorites));
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-sucess';
+    toast.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
