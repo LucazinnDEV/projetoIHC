@@ -566,3 +566,22 @@ body {
 .tab-content.active {
     display: block;
 }
+.favorites-list {
+    list-style: none;
+}
+
+.favorites-list li {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.view-favorite-btn {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+}

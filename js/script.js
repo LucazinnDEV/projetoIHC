@@ -210,10 +210,9 @@ function initUI() {
             document.getElementById(`${tab}Tab`).classList.add('active');
                 if(tab === 'favorites'){
                     renderFavorites();  
-            }
-        });
-    });
-    
+                }
+            });
+         });
     // Mobile menu toggle
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
         document.querySelector('.nav-center').classList.toggle('active');
