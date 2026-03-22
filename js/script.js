@@ -4,11 +4,13 @@ let map;
 let routeLayers = {};
 let allStopsLayer;
 let highlightedLayerGroup;
+let currentFavoriteBtn = null
 
 // Constants
 const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
 const STORAGE_KEY_HISTORY = 'recifeHub_history';
 const STORAGE_KEY_USER = 'recifeHub_user';
+const STORAGE_KEY_FAVORITES = 'recifeHub_favorites';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
@@ -45,7 +47,34 @@ async function loadData() {
         drawAllRoutes();
     } catch (error) {
         console.error("Error loading routes:", error);
-        document.getElementById('loadingOverlay').innerHTML = `<p style="color:red">Erro ao carregar dados. Verifique o servidor.</p>`;
+        
+        // estado de erro c botao retry
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.style.opacity = '1';
+        overlay.innerHTML = `
+            <div style="text-align:center; max-width:400px;">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size:4rem; color:#ef4444; margin-bottom:20px;"></i>
+                <h2 style="color:#1e293b; margin-bottom:12px; font-size:1.5rem;">Erro ao Carregar Rotas :(</h2>
+                <p style="color:#64748b; margin-bottom:30px; line-height:1.6;">
+                    Não foi possível conectar ao servidor. Verifique sua conexão ou tente novamente.
+                </p>
+                <button onclick="location.reload()" style="
+                    padding:14px 28px; 
+                    background:#4f46e5; 
+                    color:white; 
+                    border:none; 
+                    border-radius:12px; 
+                    font-weight:600; 
+                    font-size:1rem;
+                    cursor:pointer; 
+                    box-shadow:0 4px 12px rgba(79,70,229,0.3);
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='#4338ca'; this.style.transform='translateY(-2px)';" 
+                   onmouseout="this.style.background='#4f46e5'; this.style.transform='translateY(0)';">
+                    <i class="fa-solid fa-rotate-right"></i> Tentar Novamente
+                </button>
+            </div>
+        `;
     }
 }
 
@@ -116,6 +145,7 @@ function selectRoute(route) {
     map.fitBounds(polyline.getBounds().pad(0.1));
     
     addToHistory(route);
+    showFavoriteButton(route);
     closeSearchDropdown();
 }
 
@@ -126,6 +156,10 @@ function resetMap() {
     highlightedLayerGroup.clearLayers();
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
+    if (currentFavoriteBtn){
+        currentFavoriteBtn.remove();
+        currentFavoriteBtn = null;
+    }
     map.setView(RECIFE_ANTIGO_COORDS, 15);
 }
 
@@ -192,7 +226,20 @@ function initUI() {
         localStorage.removeItem(STORAGE_KEY_HISTORY);
         renderProfileHistory();
     });
-
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            document.getElementById(`${tab}Tab`).classList.add('active');
+                if(tab === 'favorites'){
+                    renderFavorites();  
+                }
+            });
+         });
     // Mobile menu toggle
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
         document.querySelector('.nav-center').classList.toggle('active');
@@ -302,3 +349,112 @@ function renderProfileHistory() {
         historyList.appendChild(li);
     });
 }
+//favoritos
+
+    function showFavoriteButton(route){
+    if(currentFavoriteBtn){
+        currentFavoriteBtn.remove();
+    }
+    const isFav = isFavorite(route.id);
+
+    currentFavoriteBtn = document.createElement('button');
+    currentFavoriteBtn.className = `favorite-btn ${isFav ? 'favorited' : ''}`;
+    currentFavoriteBtn.innerHTML = `<i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i> ${isFav ? 'Favoritado' : 'Favoritar'}`;
+
+    currentFavoriteBtn.onclick = () => toggleFavorite(route);
+
+    document.body.appendChild(currentFavoriteBtn);
+}
+function getFavorites() {
+    const data = localStorage.getItem(STORAGE_KEY_FAVORITES);
+    return data ? JSON.parse(data) : [];
+}
+function isFavorite(routeId) {
+    const favorites = getFavorites();
+    return favorites.some(r => r.id === routeId);
+}
+function toggleFavorite(route) {
+    let favorites = getFavorites();
+    const idx = favorites.findIndex(r => r.id === route.id);
+
+    if (idx >= 0){
+        favorites.splice(idx,1);
+        currentFavoriteBtn.className = 'favorite-btn';
+        currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+        showToast('Rota removida dos favoritos!!');
+    }else{
+        showToast('Rota adicionada aos favoritos!!');
+        favorites.push({
+            id: route.id,
+            name: route.name,
+            color: route.color
+        });
+        currentFavoriteBtn.className = 'favorite-btn favorited';
+        currentFavoriteBtn.innerHTML = '<i class="fa-solid fa-star"></i>';
+    }
+    localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favorites));
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-sucess';
+    toast.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function renderFavorites() {
+    const favoritesList = document.getElementById('favoritesList');
+    const favorites = getFavorites();
+        
+      favoritesList.innerHTML = '';
+        
+    if (favorites.length === 0) {
+        favoritesList.innerHTML = '<li style="text-align:center;padding:40px;color:#94a3b8;">Nenhuma rota favoritada ainda</li>';
+        return;
+    }
+    favorites.forEach(fav => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div style="display:flex;gap:10px;align-items:center;">
+                <div class="route-color-dot" style="background:${fav.color}"></div>
+                <strong>${fav.name}</strong>
+            </div>
+            <div>
+                <button class="view-favorite-btn">Ver</button>
+                <button class="remove-fav-btn" style="background:none;border:none;color: #ef4444;cursor:pointer;padding:6px;">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+         `;
+         // botão ver
+         li.querySelector('.view-favorite-btn').addEventListener('click', () => {
+            const route = busRoutes.find(r => r.id === fav.id);
+            if (route) {
+                document.getElementById('profileModal').classList.remove('active');
+                selectRoute(route);
+                }
+            });
+        //botão remover
+        li.querySelector('.remove-fav-btn').addEventListener('click', () => {
+            let favs = getFavorites();
+            favs = favs.filter(f => f.id !== fav.id);
+            localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favs));
+            renderFavorites();
+            showToast('Favorito removido');
+
+            if(currentFavoriteBtn){
+                currentFavoriteBtn.className = 'favorite-btn';
+                currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
+            }
+        });
+            
+        favoritesList.appendChild(li);
+    });
+}
+
+       

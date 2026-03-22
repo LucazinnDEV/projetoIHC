@@ -490,3 +490,98 @@ body {
     .mobile-menu-btn { display: flex; }
     .floating-controls { bottom: 20px; right: 20px; }
 }
+
+/* Botão de favoritar */
+.favorite-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: white; 
+    padding: 12px 20px; 
+    border-radius: 20px; 
+    border: 2px solid #fbbf24;
+    cursor: pointer;
+    display: flex;
+    gap: 8px; 
+    z-index: 1000;
+}
+.favorite-btn:hover {
+    background: #fbbf24; 
+    color: white; 
+    transform: translateY(-2px);    
+}
+.favorite-btn.favorited{
+    background: #fbbf24; 
+    color: white;
+}
+/*toast de feedback */
+.toast{
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: white;
+    padding: 16px 24px;
+    border-radius: 12px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 12px;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 5000; 
+}
+.toast.show{
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.toast-sucess{
+    border-left: 4px solid #10b981;
+}
+
+.modal-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+.favorites-list {
+    list-style: none;
+}
+
+.favorites-list li {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.view-favorite-btn {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
