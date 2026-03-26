@@ -5273,9 +5273,9 @@
     "accessibility": "Yes",
     "air_conditioning": "Yes",
     "images": [
-      "img/circular-1.png",
-      "img/circular-2.png",
-      "img/circular-3.png"
+      "assets/imgs/117/117-circular.png",
+      "assets/imgs/117/117-frente.jpg",
+      "assets/imgs/117/117-costas.jpg"
     ]
   },
   {
