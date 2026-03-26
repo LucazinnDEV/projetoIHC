@@ -1,1 +1,27 @@
 @import url(style.css);
+.bus_name_container{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.bus_name{
+    background-color: var(--terciary);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#color{
+    background-color: yellow;
+    color: yellow;
+    height: 3vh;
+    width: 1vh;
+    border-radius: 10px;
+    margin-left: 20px;
+}
+.bus_container_favorites{
+    display: flex;
+    justify-content: space-between;
+    width: 110%;
+    padding: 10px 16px;
+}
