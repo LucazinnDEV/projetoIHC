@@ -1,5 +1,12 @@
 @import url(style.css);
-.bus_name_container{
+main{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 30px;
+}
+/* nome da linha do onibus */
+#bus_name_container, #schedules_container{
     align-items: center;
     display: flex;
     justify-content: center;
@@ -22,6 +29,28 @@
 .bus_container_favorites{
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     width: 110%;
     padding: 10px 16px;
+}
+/* horarios */
+#schedules_container{
+    display: block;
+}
+.header_schedule{
+    display: flex;
+    justify-content: space-between;
+}
+.schedules{
+    display: flex;
+    gap: 10px;
+}
+.schedule{
+    background-color: var(--terciary);
+    padding: 15px;
+    border-radius: 20px;
+}
+/* preco passagem */
+#price_container{
+    
 }
