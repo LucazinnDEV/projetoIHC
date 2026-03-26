@@ -5,6 +5,7 @@ let routeLayers = {};
 let allStopsLayer;
 let highlightedLayerGroup;
 let currentFavoriteBtn = null
+let selectedRouteId = null;
 
 // Constants
 const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
@@ -91,6 +92,7 @@ function drawAllRoutes() {
             selectRoute(route);
             document.getElementById('searchInput').value = route.name;
         });
+        
 
         routeLayers[route.id] = { polyline, data: route };
     });
@@ -98,6 +100,12 @@ function drawAllRoutes() {
 
 // Select a route (Highlight + History)
 function selectRoute(route) {
+    // Ensure we always use the full route object loaded from JSON.
+    const fullRoute = routeLayers[route.id]?.data || route;
+    selectedRouteId = fullRoute.id;
+
+    hideDetailedLineInfo();
+
     // Dim others
     Object.values(routeLayers).forEach(({polyline}) => {
         polyline.setStyle({ weight: 4, opacity: 0.2 });
@@ -106,14 +114,14 @@ function selectRoute(route) {
     highlightedLayerGroup.clearLayers();
 
     // Highlight selected
-    const { polyline } = routeLayers[route.id];
-    polyline.setStyle({ color: route.color, weight: 10, opacity: 1 });
+    const { polyline } = routeLayers[fullRoute.id];
+    polyline.setStyle({ color: fullRoute.color, weight: 10, opacity: 1 });
     polyline.bringToFront();
 
     // Add terminus/stops
-    if(route.path && route.path.length > 0) {
-        const start = route.path[0];
-        const end = route.path[route.path.length - 1];
+    if(fullRoute.path && fullRoute.path.length > 0) {
+        const start = fullRoute.path[0];
+        const end = fullRoute.path[fullRoute.path.length - 1];
         
         [start, end].forEach((pt, idx) => {
             L.marker(pt, {
@@ -124,17 +132,17 @@ function selectRoute(route) {
                     iconAnchor: [13, 13]
                 })
             }).addTo(highlightedLayerGroup)
-              .bindPopup(`<strong>${route.name}</strong><br>${idx === 0 ? 'Início/Fim no Recife Antigo' : 'Destino'}`);
+              .bindPopup(`<strong>${fullRoute.name}</strong><br>${idx === 0 ? 'Início/Fim no Recife Antigo' : 'Destino'}`);
         });
     }
 
     // Optional: add some small markers for real stops if they exist
-    if (route.stops && route.stops.length > 0) {
-        route.stops.forEach(stop => {
+    if (fullRoute.stops && fullRoute.stops.length > 0) {
+        fullRoute.stops.forEach(stop => {
             L.circleMarker(stop, {
                 radius: 5,
                 fillColor: '#fff',
-                color: route.color,
+                color: fullRoute.color,
                 weight: 2,
                 opacity: 1,
                 fillOpacity: 1
@@ -142,14 +150,18 @@ function selectRoute(route) {
         });
     }
 
+    //mostrar informações da linha
+    showLineInfo(fullRoute);
+
     map.fitBounds(polyline.getBounds().pad(0.1));
     
-    addToHistory(route);
-    showFavoriteButton(route);
+    addToHistory(fullRoute);
+    showFavoriteButton(fullRoute);
     closeSearchDropdown();
 }
 
 function resetMap() {
+    selectedRouteId = null;
     Object.values(routeLayers).forEach(({polyline, data}) => {
         polyline.setStyle({ color: data.color, weight: 5, opacity: 0.6 });
     });
@@ -160,6 +172,8 @@ function resetMap() {
         currentFavoriteBtn.remove();
         currentFavoriteBtn = null;
     }
+
+    hideLineInfo();
     map.setView(RECIFE_ANTIGO_COORDS, 15);
 }
 
@@ -457,4 +471,120 @@ function renderFavorites() {
     });
 }
 
-       
+//mostrar informações da linha
+function showLineInfo(route){
+    const lineInfoContainer = document.getElementById('lineInfoContainer');
+    lineInfoContainer.classList.remove('line-info-fullscreen');
+    lineInfoContainer.style.display = 'block';
+    const showMoreBtn = document.getElementById('showMoreInfoBtn');
+    const lessInfoBtn = document.getElementById('LessInfoBtn');
+    const detailedInfo = document.getElementById('detailedInfo');
+
+    detailedInfo.style.display = 'none';
+    lessInfoBtn.style.display = 'none';
+    showMoreBtn.style.display = 'block';
+
+    showMoreBtn.onclick = () => {
+        if (selectedRouteId !== route.id) return;
+
+        lineInfoContainer.classList.add('line-info-fullscreen');
+        const price = route.price || route.preco || 'Não informado';
+        const terminal = route.terminal || 'Não informado';
+        const topStops = Array.isArray(route.top_stops) ? route.top_stops : [];
+        const namedStops = Array.isArray(route.stops)
+            ? route.stops.filter(stop => stop && typeof stop === 'object' && !Array.isArray(stop) && (stop.name || stop.image))
+            : [];
+        const displayStops = topStops.length > 0 ? topStops : namedStops;
+        const topStopsHtml = displayStops.length > 0
+            ? displayStops.slice(0, 5).map(stop => `
+                        <div class="stop">
+                            ${stop.image ? `<img src="${stop.image}" alt="Imagem de ${stop.name || 'Parada'}">` : ''}
+                            <p>${stop.name || 'Parada sem nome'}</p>
+                        </div>`).join('')
+            : `<p style="color:#94a3b8;">Nenhuma parada em destaque disponível para esta linha.</p>`;
+        detailedInfo.style.display = 'block';
+        showMoreBtn.style.display = 'none';
+        lessInfoBtn.style.display = 'block';
+        detailedInfo.innerHTML = `
+            <section id="bus_name_container">
+                <div class="bus_name">
+                    <div id="color" style="background:${route.color}"></div>
+                    <div class="bus_container_favorites">
+                        <p>${route.name}</p>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <section id="main_infos_container">
+                <section id="price_container">
+                    <p>Valor da passagem</p>
+                    <p class="price">${price}</p>
+                </section>
+                <section id="terminal_container">
+                    <p>Terminal</p>
+                    <div class="name_terminal_container">
+                        <p class="name_terminal">${terminal}</p>
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+                </section>
+                <hr>
+                <section id="top_stops_container">
+                    <p>Paradas em destaque</p>
+                    <div class="top_stops">
+                    ${topStopsHtml}
+                    </div>
+                </section>
+                <hr>
+                <section id="other_info_container">
+                ${route.integration === 'Yes' ? `<div class="integration">Integração com ${route.integration_place}  <i class="fa-regular fa-circle-question"></i></div>` : ''}
+                    <div class="bonus">
+                    ${route.accessibility === 'Yes' ? `
+                        <div class="acessibility">
+                            <i class="fa-brands fa-accessible-icon"></i>
+                            <p>Acessibilidade</p>
+                        </div>` : ''}
+                    ${route.air_conditioning === 'Yes' ? `
+                        <div class="air_conditioning">
+                            <i class="fa-solid fa-snowflake"></i>
+                            <p>Ar Condicionado</p>
+                        </div>` : ''}
+                    </div>
+                </section>
+            </section>
+            <hr>
+            <section id="galery_container">
+                <p>Galeria</p>
+                <div class="galery">
+                ${route.images && route.images.length > 0 ? route.images.map(img => `<img src="${img}" alt="Imagem do onibus">`).join('') : `<p style="color:#94a3b8;">Nenhuma imagem disponível para esta linha.</p>`}
+                </div>
+            </section>
+        `;
+    };
+
+    lessInfoBtn.onclick = () => {
+        hideDetailedLineInfo();
+    };
+}      
+
+function hideDetailedLineInfo() {
+    const lineInfoContainer = document.getElementById('lineInfoContainer');
+    const showMoreBtn = document.getElementById('showMoreInfoBtn');
+    const lessInfoBtn = document.getElementById('LessInfoBtn');
+    const detailedInfo = document.getElementById('detailedInfo');
+
+    if (!lineInfoContainer || !showMoreBtn || !lessInfoBtn || !detailedInfo) return;
+
+    lineInfoContainer.classList.remove('line-info-fullscreen');
+    detailedInfo.style.display = 'none';
+    lessInfoBtn.style.display = 'none';
+    showMoreBtn.style.display = 'block';
+}
+
+function hideLineInfo() {
+    const lineInfoContainer = document.getElementById('lineInfoContainer');
+    if (!lineInfoContainer) return;
+
+    hideDetailedLineInfo();
+    lineInfoContainer.style.display = 'none';
+}

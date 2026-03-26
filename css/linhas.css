@@ -6,6 +6,11 @@ main{
     gap: 30px;
 }
 /* nome da linha do onibus */
+hr{
+    border: none;
+    border-top: 1px solid var(--terciary);
+    margin: 10px 0;
+}
 #bus_name_container, #schedules_container{
     align-items: center;
     display: flex;
@@ -19,7 +24,7 @@ main{
     align-items: center;
 }
 #color{
-    background-color: yellow;
+    background-color: #ffff00;
     color: yellow;
     height: 3vh;
     width: 1vh;
@@ -59,4 +64,49 @@ main{
     display: flex;
     justify-content: space-between;
     gap: 15px;
+}
+.top_stops{
+    display: flex;
+    gap: 10px;
+}
+.stop{
+    background-color: var(--terciary);
+    padding: 10px;
+    border-radius: 20px;
+}
+#other_info_container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.integration{
+    display: flex;
+    gap: 10px;
+    color: var(--secondary);
+}
+.integration i{
+    color: var(--primary);
+}
+.bonus{
+    display: flex;
+    gap: 10px;
+}
+.acessibility, .air_conditioning{
+    display: flex;
+    gap: 10px;
+    background-color: var(--terciary);
+    padding: 10px;
+    border-radius: 10px;    
+}
+/* galeria */
+#gallery_container{
+    display: flex;
+}
+.galery{
+    display: flex;
+    gap: 10px;
+}
+.galery img{
+    width: 100%;
+    border-radius: 20px;
 }

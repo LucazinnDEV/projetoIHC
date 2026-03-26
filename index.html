@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recife Hub - Ônibus no Recife Antigo</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/linhas.css">
+
 </head>
+
 <body>
 
     <!-- Glass Navbar -->
@@ -32,9 +37,10 @@
         <div class="nav-center">
             <div class="search-container">
                 <i class="fa-solid fa-search search-icon"></i>
-                 <input type="text" id="searchInput" placeholder="Buscar rota de ônibus..." autocomplete="off"><!-- pesquisar linhas -->
+                <input type="text" id="searchInput" placeholder="Buscar rota de ônibus..."
+                    autocomplete="off"><!-- pesquisar linhas -->
                 <i class="fa-solid fa-times clear-search" id="clearSearchBtn" style="display: none;"></i>
-                
+
                 <div class="search-dropdown" id="searchDropdown">
                     <div class="dropdown-header" id="dropdownHeader">Rotas Recentes</div>
                     <ul class="dropdown-list" id="dropdownList">
@@ -60,9 +66,9 @@
             <div class="spinner"></div>
             <p>Carregando malha viária do Recife Antigo...</p>
         </div>
-        
+
         <div id="map"></div>
-        
+
         <div class="floating-controls">
             <button id="resetMapBtn" class="floating-btn" title="Mostrar todas as rotas">
                 <i class="fa-solid fa-layer-group"></i> Visão Geral
@@ -77,51 +83,69 @@
                 <h2>Meu Perfil</h2>
                 <button class="close-btn" id="closeProfileBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
+
             <div class="modal-body">
                 <!-- Abas -->
-                 <div class="modal-tabs">
+                <div class="modal-tabs">
                     <button class="tab-btn active" data-tab="profile">Perfil</button>
                     <button class="tab-btn" data-tab="favorites">Favoritos</button>
                     <button class="tab-btn" data-tab="history">Histórico</button>
                 </div>
-    
-                 <!-- Perfil -->
+
+                <!-- Perfil -->
                 <div class="tab-content active" id="profileTab">
                     <div class="user-info-section">
                         <div class="avatar-placeholder">
                             <i class="fa-solid fa-user"></i>
                         </div>
-                         <div class="info-inputs">
-                             <label for="userName">Nome</label>
-                             <input type="text" id="userName" placeholder="Como se chama?">
-                             <button class="save-btn" id="saveProfileBtn">Salvar</button>
-                            </div>
-                         </div>
+                        <div class="info-inputs">
+                            <label for="userName">Nome</label>
+                            <input type="text" id="userName" placeholder="Como se chama?">
+                            <button class="save-btn" id="saveProfileBtn">Salvar</button>
                         </div>
-    
+                    </div>
+                </div>
+
                 <!--Favoritos -->
                 <div class="tab-content" id="favoritesTab">
-                     <ul class="favorites-list" id="favoritesList"></ul>
-                     </div>
-    
-                 <!-- Histórico -->
-                  <div class="tab-content" id="historyTab">
+                    <ul class="favorites-list" id="favoritesList"></ul>
+                </div>
+
+                <!-- Histórico -->
+                <div class="tab-content" id="historyTab">
                     <div class="history-section">
                         <div class="history-header">
-                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Histórico</h3>
-                         <button class="text-btn danger" id="clearHistoryBtn">Limpar</button>
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Histórico</h3>
+                            <button class="text-btn danger" id="clearHistoryBtn">Limpar</button>
+                        </div>
+                        <ul class="history-list" id="profileHistoryList"></ul>
                     </div>
-                    <ul class="history-list" id="profileHistoryList"></ul>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- informações da linha -->
+    <div id="lineInfoContainer" style="display: none;">
+        <!-- parte com um resumo sobre a linha -->
+
+         <!-- inicio parte temporaria: -->
+            <p>linha de onibus</p>
+            <button id="showMoreInfoBtn">Ver mais</button>
+            <button id="LessInfoBtn" style="display: none;">Ver menos</button>
+        <!-- fim da parte temporaria -->
+
+        <!-- parte mais detalhada com mais informações -->
+        <div id="detailedInfo" style="display: none;">
+            
+        </div>
+    </div>
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- App JS -->
     <script src="js/script.js"></script>
 </body>
+
 </html>

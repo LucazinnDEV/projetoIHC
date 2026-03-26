@@ -1,7 +1,7 @@
 [
   {
     "id": 9727257,
-    "name": "TI Camaragibe - Conde da Boa Vista (BRT)",
+    "name": "2450 - TI Camaragibe (Conde da Boa Vista) - (BRT)",
     "color": "#FF0000",
     "path": [
       [
@@ -3238,8 +3238,8 @@
   },
   {
     "id": 9776190,
-    "name": "Circular (Prefeitura - Cabugá)",
-    "color": "#00FF00",
+    "name": "117 - T.I. Recife (PCR/Cabugá) (Circular)",
+    "color": "#ffff00",
     "path": [
       [
         -8.04268,
@@ -5227,6 +5227,55 @@
         -8.0682201,
         -34.88433
       ]
+    ],
+    "price": "R$ 4,50",
+    "terminal": "T.I. Recife",
+    "top_stops":[
+      {
+        "name": "Estação Central",
+        "image": "img/estacao-central.png"
+      },
+      {
+        "name": "Sede do Porto Digital",
+        "image": "img/porto-digital.png"
+      },
+      {
+        "name": "CESAR School",
+        "image": "img/cesar-school.png"
+      },
+      {
+        "name": "Prefeitura do Recife",
+        "image": "img/prefeitura.png"
+      },
+      {
+        "name": "Shopping Tacaruna",
+        "image": "img/tacaruna.png"
+      },
+      {
+        "name": "Hospital de Câncer de Pernambuco",
+        "image": "img/cancer.png"
+      },
+      {
+        "name": "IEADPE Tempo Central",
+        "image": "img/ieadpe.png"
+      },
+      {
+        "name": "Parque Treze de Maio",
+        "image": "img/parque-treze.png"
+      },
+      {
+        "name": "Agência Central dos Correios",
+        "image": "img/correios.png"
+      }
+    ],
+    "integration": "Yes",
+    "integration_place": "Estação Recife",
+    "accessibility": "Yes",
+    "air_conditioning": "Yes",
+    "images": [
+      "img/circular-1.png",
+      "img/circular-2.png",
+      "img/circular-3.png"
     ]
   },
   {
