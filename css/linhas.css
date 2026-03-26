@@ -37,7 +37,7 @@ main{
 #schedules_container{
     display: block;
 }
-.header_schedule{
+.header_schedule, #price_container, #terminal_container{
     display: flex;
     justify-content: space-between;
 }
@@ -50,7 +50,13 @@ main{
     padding: 15px;
     border-radius: 20px;
 }
-/* preco passagem */
-#price_container{
-    
+#main_infos_container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.name_terminal_container{
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
 }
