@@ -65,14 +65,30 @@ hr{
     justify-content: space-between;
     gap: 15px;
 }
+#top_stops_container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 .top_stops{
     display: flex;
-    gap: 10px;
+    gap: 15px;
 }
 .stop{
     background-color: var(--terciary);
     padding: 10px;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.stop img{
+    width: 10vh;
+    height: 10vh;
+    border-radius: 10px;
 }
 #other_info_container{
     display: flex;
