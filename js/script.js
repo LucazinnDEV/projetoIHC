@@ -40,7 +40,7 @@ async function loadData() {
         const response = await fetch('assets/rotas.json');
         if (!response.ok) throw new Error('Network response was not ok');
         busRoutes = await response.json();
-        
+
         // Hide loading
         document.getElementById('loadingOverlay').style.opacity = '0';
         setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);
@@ -48,7 +48,7 @@ async function loadData() {
         drawAllRoutes();
     } catch (error) {
         console.error("Error loading routes:", error);
-        
+
         // estado de erro c botao retry
         const overlay = document.getElementById('loadingOverlay');
         overlay.style.opacity = '1';
@@ -92,7 +92,7 @@ function drawAllRoutes() {
             selectRoute(route);
             document.getElementById('searchInput').value = route.name;
         });
-        
+
 
         routeLayers[route.id] = { polyline, data: route };
     });
@@ -107,7 +107,7 @@ function selectRoute(route) {
     hideDetailedLineInfo();
 
     // Dim others
-    Object.values(routeLayers).forEach(({polyline}) => {
+    Object.values(routeLayers).forEach(({ polyline }) => {
         polyline.setStyle({ weight: 4, opacity: 0.2 });
     });
 
@@ -119,10 +119,10 @@ function selectRoute(route) {
     polyline.bringToFront();
 
     // Add terminus/stops
-    if(fullRoute.path && fullRoute.path.length > 0) {
+    if (fullRoute.path && fullRoute.path.length > 0) {
         const start = fullRoute.path[0];
         const end = fullRoute.path[fullRoute.path.length - 1];
-        
+
         [start, end].forEach((pt, idx) => {
             L.marker(pt, {
                 icon: L.divIcon({
@@ -132,7 +132,7 @@ function selectRoute(route) {
                     iconAnchor: [13, 13]
                 })
             }).addTo(highlightedLayerGroup)
-              .bindPopup(`<strong>${fullRoute.name}</strong><br>${idx === 0 ? 'Início/Fim no Recife Antigo' : 'Destino'}`);
+                .bindPopup(`<strong>${fullRoute.name}</strong><br>${idx === 0 ? 'Início/Fim no Recife Antigo' : 'Destino'}`);
         });
     }
 
@@ -154,7 +154,7 @@ function selectRoute(route) {
     showLineInfo(fullRoute);
 
     map.fitBounds(polyline.getBounds().pad(0.1));
-    
+
     addToHistory(fullRoute);
     showFavoriteButton(fullRoute);
     closeSearchDropdown();
@@ -162,13 +162,13 @@ function selectRoute(route) {
 
 function resetMap() {
     selectedRouteId = null;
-    Object.values(routeLayers).forEach(({polyline, data}) => {
+    Object.values(routeLayers).forEach(({ polyline, data }) => {
         polyline.setStyle({ color: data.color, weight: 5, opacity: 0.6 });
     });
     highlightedLayerGroup.clearLayers();
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').style.display = 'none';
-    if (currentFavoriteBtn){
+    if (currentFavoriteBtn) {
         currentFavoriteBtn.remove();
         currentFavoriteBtn = null;
     }
@@ -184,7 +184,7 @@ function initUI() {
     const dropdownList = document.getElementById('dropdownList');
     const dropdownHeader = document.getElementById('dropdownHeader');
     const clearSearchBtn = document.getElementById('clearSearchBtn');
-    
+
     // Search Interactivity
     searchInput.addEventListener('focus', () => {
         renderSearchDropdown();
@@ -224,7 +224,7 @@ function initUI() {
     });
 
     closeProfileBtn.addEventListener('click', () => profileModal.classList.remove('active'));
-    
+
     profileModal.addEventListener('click', (e) => {
         if (e.target === profileModal) profileModal.classList.remove('active');
     });
@@ -245,15 +245,15 @@ function initUI() {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
+
             btn.classList.add('active');
             const tab = btn.dataset.tab;
             document.getElementById(`${tab}Tab`).classList.add('active');
-                if(tab === 'favorites'){
-                    renderFavorites();  
-                }
-            });
-         });
+            if (tab === 'favorites') {
+                renderFavorites();
+            }
+        });
+    });
     // Mobile menu toggle
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
         document.querySelector('.nav-center').classList.toggle('active');
@@ -264,7 +264,7 @@ function renderSearchDropdown(query = '') {
     const searchDropdown = document.getElementById('searchDropdown');
     const dropdownList = document.getElementById('dropdownList');
     const dropdownHeader = document.getElementById('dropdownHeader');
-    
+
     dropdownList.innerHTML = '';
 
     if (!query) {
@@ -302,7 +302,7 @@ function renderSearchDropdown(query = '') {
             });
         }
     }
-    
+
     searchDropdown.classList.add('active');
 }
 
@@ -336,7 +336,7 @@ function loadProfileData() {
 function renderProfileHistory() {
     const historyList = document.getElementById('profileHistoryList');
     const history = getHistory();
-    
+
     historyList.innerHTML = '';
     if (history.length === 0) {
         historyList.innerHTML = '<li>Nenhuma rota recente. Busque e clique em uma rota no mapa!</li>';
@@ -355,7 +355,7 @@ function renderProfileHistory() {
         li.querySelector('button').addEventListener('click', () => {
             document.getElementById('profileModal').classList.remove('active');
             const fullRoute = busRoutes.find(r => r.id === route.id);
-            if(fullRoute) {
+            if (fullRoute) {
                 selectRoute(fullRoute);
                 document.getElementById('searchInput').value = route.name;
             }
@@ -365,8 +365,8 @@ function renderProfileHistory() {
 }
 //favoritos
 
-    function showFavoriteButton(route){
-    if(currentFavoriteBtn){
+function showFavoriteButton(route) {
+    if (currentFavoriteBtn) {
         currentFavoriteBtn.remove();
     }
     const isFav = isFavorite(route.id);
@@ -391,12 +391,12 @@ function toggleFavorite(route) {
     let favorites = getFavorites();
     const idx = favorites.findIndex(r => r.id === route.id);
 
-    if (idx >= 0){
-        favorites.splice(idx,1);
+    if (idx >= 0) {
+        favorites.splice(idx, 1);
         currentFavoriteBtn.className = 'favorite-btn';
         currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
         showToast('Rota removida dos favoritos!!');
-    }else{
+    } else {
         showToast('Rota adicionada aos favoritos!!');
         favorites.push({
             id: route.id,
@@ -424,9 +424,9 @@ function showToast(message) {
 function renderFavorites() {
     const favoritesList = document.getElementById('favoritesList');
     const favorites = getFavorites();
-        
-      favoritesList.innerHTML = '';
-        
+
+    favoritesList.innerHTML = '';
+
     if (favorites.length === 0) {
         favoritesList.innerHTML = '<li style="text-align:center;padding:40px;color:#94a3b8;">Nenhuma rota favoritada ainda</li>';
         return;
@@ -445,14 +445,14 @@ function renderFavorites() {
                 </button>
             </div>
          `;
-         // botão ver
-         li.querySelector('.view-favorite-btn').addEventListener('click', () => {
+        // botão ver
+        li.querySelector('.view-favorite-btn').addEventListener('click', () => {
             const route = busRoutes.find(r => r.id === fav.id);
             if (route) {
                 document.getElementById('profileModal').classList.remove('active');
                 selectRoute(route);
-                }
-            });
+            }
+        });
         //botão remover
         li.querySelector('.remove-fav-btn').addEventListener('click', () => {
             let favs = getFavorites();
@@ -461,18 +461,18 @@ function renderFavorites() {
             renderFavorites();
             showToast('Favorito removido');
 
-            if(currentFavoriteBtn){
+            if (currentFavoriteBtn) {
                 currentFavoriteBtn.className = 'favorite-btn';
                 currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
             }
         });
-            
+
         favoritesList.appendChild(li);
     });
 }
 
 //mostrar informações da linha
-function showLineInfo(route){
+function showLineInfo(route) {
     const lineInfoContainer = document.getElementById('lineInfoContainer');
     lineInfoContainer.classList.remove('line-info-fullscreen');
     lineInfoContainer.style.display = 'block';
@@ -496,7 +496,7 @@ function showLineInfo(route){
             : [];
         const displayStops = topStops.length > 0 ? topStops : namedStops;
         const topStopsHtml = displayStops.length > 0
-            ? displayStops.slice(0, 5).map(stop => `
+            ? displayStops.slice(0, displayStops.length).map(stop => `
                         <div class="stop">
                             ${stop.image ? `<img src="${stop.image}" alt="Imagem de ${stop.name || 'Parada'}">` : ''}
                             <p>${stop.name || 'Parada sem nome'}</p>
@@ -568,7 +568,7 @@ function showLineInfo(route){
     lessInfoBtn.onclick = () => {
         hideDetailedLineInfo();
     };
-}      
+}
 
 function hideDetailedLineInfo() {
     const lineInfoContainer = document.getElementById('lineInfoContainer');
