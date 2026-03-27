@@ -525,7 +525,7 @@ function showLineInfo(route) {
                     <p>Terminal</p>
                     <div class="name_terminal_container">
                         <p class="name_terminal">${terminal}</p>
-                        <i class="fa-solid fa-circle-info"></i>
+                        <i class="fa-solid fa-circle-info" onclick="showTerminalInfo('${terminal}')"></i>
                     </div>
                 </section>
                 <hr>
@@ -594,7 +594,7 @@ function hideLineInfo() {
 // script para drag horizontal em containers de paradas e galeria de imagens
 function enableHorizontalDrag(container) {
     if (!container || container.dataset.dragReady === 'true') return;
-
+    
     let isDragging = false;
     let startX = 0;
     let startScrollLeft = 0;
@@ -622,3 +622,7 @@ function enableHorizontalDrag(container) {
     container.addEventListener('mouseup', stopDragging);
     container.dataset.dragReady = 'true';
 }
+
+//mostrar informações do terminal
+function showTerminalInfo(terminal) {}
+

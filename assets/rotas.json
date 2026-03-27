@@ -5233,39 +5233,39 @@
     "top_stops":[
       {
         "name": "Estação Central",
-        "image": "assets/top_stops/estacao-recife.jpg"
+        "image": "assets/imgs/top_stops/estacao-recife.jpg"
       },
       {
         "name": "Porto Digital",
-        "image": "assets/top_stops/porto-digital.jpg"
+        "image": "assets/imgs/top_stops/porto-digital.jpg"
       },
       {
         "name": "CESAR School",
-        "image": "assets/top_stops/cesar.jpg"
+        "image": "assets/imgs/top_stops/cesar.jpg"
       },
       {
         "name": "Prefeitura do Recife",
-        "image": "assets/top_stops/prefeitura.jpg"
+        "image": "assets/imgs/top_stops/prefeitura.jpg"
       },
       {
         "name": "Shopping Tacaruna",
-        "image": "assets/top_stops/shopping_tacaruna.jpg"
+        "image": "assets/imgs/top_stops/shopping_tacaruna.jpg"
       },
       {
         "name": "Hospital de Câncer de Pernambuco",
-        "image": "assets/top_stops/hospital-cancer.jpg"
+        "image": "assets/imgs/top_stops/hospital-cancer.jpg"
       },
       {
         "name": "IEADPE Tempo Central",
-        "image": "assets/top_stops/ieadpe.jpg"
+        "image": "assets/imgs/top_stops/ieadpe.jpg"
       },
       {
         "name": "Parque Treze de Maio",
-        "image": "assets/top_stops/parque-13-maio.jpg"
+        "image": "assets/imgs/top_stops/parque-13-maio.jpg"
       },
       {
         "name": "Agência Central dos Correios",
-        "image": "assets/top_stops/correios.jpg"
+        "image": "assets/imgs/top_stops/correios.jpg"
       }
     ],
     "integration": "Yes",
@@ -5273,9 +5273,9 @@
     "accessibility": "Yes",
     "air_conditioning": "Yes",
     "images": [
-      "assets/imgs/117/117-circular.png",
-      "assets/imgs/117/117-frente.jpg",
-      "assets/imgs/117/117-costas.jpg"
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"
     ]
   },
   {
