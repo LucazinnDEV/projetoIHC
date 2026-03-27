@@ -1,4 +1,11 @@
 @import url(style.css);
+
+:root {
+    --line-title-size: 1.125rem;
+    --line-text-size: 0.95rem;
+    --line-muted-size: 0.875rem;
+}
+
 main{
     display: flex;
     flex-direction: column;
@@ -6,6 +13,9 @@ main{
     gap: 30px;
 }
 /* nome da linha do onibus */
+.separator{
+    margin: 20px 0;
+}
 hr{
     border: none;
     border-top: 1px solid var(--terciary);
@@ -22,6 +32,7 @@ hr{
     display: flex;
     justify-content: space-around;
     align-items: center;
+    min-height: 52px;
 }
 #color{
     background-color: #ffff00;
@@ -34,9 +45,22 @@ hr{
 .bus_container_favorites{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 10px;
     width: 110%;
-    padding: 10px 16px;
+    padding: 0px;
+    align-items: center;
+}
+
+.bus_container_favorites p {
+    color: #1e293b;
+    font-size: var(--line-title-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.01em;
 }
 /* horarios */
 #schedules_container{
@@ -55,6 +79,26 @@ hr{
     padding: 15px;
     border-radius: 20px;
 }
+
+#lineInfoContainer p,
+#lineInfoContainer .name_terminal,
+#lineInfoContainer .price {
+    color: #334155;
+    font-size: var(--line-text-size);
+    font-weight: 500;
+    line-height: 1.45;
+}
+.price, .name_terminal_container{
+    margin-right: 10px;
+
+}
+
+#lineInfoContainer section > p:first-child {
+    color: #0f172a;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
 #main_infos_container{
     display: flex;
     flex-direction: column;
@@ -63,7 +107,7 @@ hr{
 .name_terminal_container{
     display: flex;
     justify-content: space-between;
-    gap: 15px;
+    gap: 10px;
 }
 #top_stops_container{
     display: flex;
@@ -73,6 +117,12 @@ hr{
 .top_stops{
     display: flex;
     gap: 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
 }
 .stop{
     background-color: var(--terciary);
@@ -84,7 +134,17 @@ hr{
     justify-content: center;
     align-items: center;
     text-align: center;
+    flex: 0 0 178px;
+    min-height: 100px;
+    scroll-snap-align: start;
 }
+
+.stop p {
+    font-size: var(--line-muted-size);
+    font-weight: 600;
+    color: #334155;
+}
+
 .stop img{
     width: 10vh;
     height: 10vh;
@@ -96,9 +156,13 @@ hr{
     gap: 20px;
 }
 .integration{
+    color: var(--terciary);
     display: flex;
     gap: 10px;
     color: var(--secondary);
+    font-size: var(--line-text-size);
+    font-weight: 500;
+    line-height: 1.45;
 }
 .integration i{
     color: var(--primary);
@@ -112,17 +176,105 @@ hr{
     gap: 10px;
     background-color: var(--terciary);
     padding: 10px;
-    border-radius: 10px;    
+    border-radius: 10px;
+    align-items: center;
+}
+
+.acessibility p,
+.air_conditioning p {
+    font-size: var(--line-muted-size);
+    font-weight: 600;
 }
 /* galeria */
-#gallery_container{
+#gallery_container,
+#galery_container{
     display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .galery{
     display: flex;
     gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
 }
 .galery img{
     width: 100%;
+    max-width: 430px;
+    min-width: 270px;
+    height: 210px;
+    object-fit: cover;
     border-radius: 20px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.top_stops::-webkit-scrollbar,
+.galery::-webkit-scrollbar {
+    height: 6px;
+}
+
+.top_stops::-webkit-scrollbar-thumb,
+.galery::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.top_stops.is-dragging,
+.galery.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+#lineInfoContainer {
+    font-family: 'Inter', sans-serif;
+}
+
+#showMoreInfoBtn,
+#LessInfoBtn {
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: var(--line-muted-size);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#showMoreInfoBtn:hover,
+#LessInfoBtn:hover {
+    background: var(--primary-hover);
+}
+
+@media (max-width: 768px) {
+    :root {
+        --line-title-size: 1rem;
+        --line-text-size: 0.9rem;
+        --line-muted-size: 0.82rem;
+    }
+
+    .bus_container_favorites {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .top_stops {
+        gap: 12px;
+    }
+
+    .stop {
+        flex-basis: 164px;
+        min-height: 198px;
+    }
+
+    .galery img {
+        min-width: 245px;
+        height: 190px;
+    }
 }

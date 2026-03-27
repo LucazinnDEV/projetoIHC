@@ -515,7 +515,7 @@ function showLineInfo(route){
                     </div>
                 </div>
             </section>
-            <hr>
+            <hr class="separator">
             <section id="main_infos_container">
                 <section id="price_container">
                     <p>Valor da passagem</p>
@@ -552,7 +552,7 @@ function showLineInfo(route){
                     </div>
                 </section>
             </section>
-            <hr>
+            <hr class="separator">
             <section id="galery_container">
                 <p>Galeria</p>
                 <div class="galery">
@@ -560,6 +560,9 @@ function showLineInfo(route){
                 </div>
             </section>
         `;
+
+        enableHorizontalDrag(detailedInfo.querySelector('.top_stops'));
+        enableHorizontalDrag(detailedInfo.querySelector('.galery'));
     };
 
     lessInfoBtn.onclick = () => {
@@ -587,4 +590,35 @@ function hideLineInfo() {
 
     hideDetailedLineInfo();
     lineInfoContainer.style.display = 'none';
+}
+// script para drag horizontal em containers de paradas e galeria de imagens
+function enableHorizontalDrag(container) {
+    if (!container || container.dataset.dragReady === 'true') return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    container.addEventListener('mousedown', (event) => {
+        isDragging = true;
+        startX = event.pageX;
+        startScrollLeft = container.scrollLeft;
+        container.classList.add('is-dragging');
+    });
+
+    container.addEventListener('mousemove', (event) => {
+        if (!isDragging) return;
+        event.preventDefault();
+        const walk = event.pageX - startX;
+        container.scrollLeft = startScrollLeft - walk;
+    });
+
+    const stopDragging = () => {
+        isDragging = false;
+        container.classList.remove('is-dragging');
+    };
+
+    container.addEventListener('mouseleave', stopDragging);
+    container.addEventListener('mouseup', stopDragging);
+    container.dataset.dragReady = 'true';
 }
