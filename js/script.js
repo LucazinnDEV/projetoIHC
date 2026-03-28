@@ -537,7 +537,7 @@ function showLineInfo(route) {
                 </section>
                 <hr>
                 <section id="other_info_container">
-                ${route.integration === 'Yes' ? `<div class="integration">Integração com ${route.integration_place}  <i class="fa-regular fa-circle-question"></i></div>` : ''}
+                ${route.integration === 'Yes' ? `<div class="integration">Integração com ${route.integration_place}  <i class="fa-regular fa-circle-question" onclick="showIntegrationInfo('${route.integration_place}')"></i></div>` : ''}
                     <div class="bonus">
                     ${route.accessibility === 'Yes' ? `
                         <div class="acessibility">
@@ -621,6 +621,32 @@ function enableHorizontalDrag(container) {
     container.addEventListener('mouseleave', stopDragging);
     container.addEventListener('mouseup', stopDragging);
     container.dataset.dragReady = 'true';
+}
+//mostrar informações da integração
+function showIntegrationInfo(integrationPlace) {
+    const detailedInfo = document.getElementById('detailedInfo');
+    if (!detailedInfo) return;
+    detailedInfo.innerHTML += `
+    <div class="integration-info-container">
+    <div class="integration-info">
+    <div class="integration-header">
+    <p>Significa que ao utilizar essa linha pagando pelo cartão VEM, não será necessário pagar uma nova passagem para utilizar o metrô na ${integrationPlace} no período de 2 horas.</p>
+    <a href="#">Saiba mais</a>
+    </div>
+    <button class="back-btn" onclick="hideIntegrationInfo()">Ok</button>
+    </div>
+    </div>
+    `
+}
+
+function hideIntegrationInfo() {
+    const detailedInfo = document.getElementById('detailedInfo');
+    if (!detailedInfo) return;
+    
+    const integrationInfoDiv = detailedInfo.querySelector('.integration-info-container');
+    if (integrationInfoDiv) {
+        integrationInfoDiv.remove();
+    }
 }
 
 //mostrar informações do terminal
