@@ -244,6 +244,47 @@ function initUI() {
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
         document.querySelector('.nav-center').classList.toggle('active');
     });
+
+    // AI Chat Events
+    const toggleAiBtn = document.getElementById('toggleAiBtn');
+    const closeChatBtn = document.getElementById('closeChatBtn');
+    const chatAssistant = document.getElementById('chatAssistant');
+    const chatInput = document.getElementById('chatInput');
+    const sendChatBtn = document.getElementById('sendChatBtn');
+
+    if (toggleAiBtn) {
+        toggleAiBtn.addEventListener('click', () => {
+            chatAssistant.classList.add('active');
+            chatInput.focus();
+            
+            // Personalize greeting if name is set
+            const userData = localStorage.getItem(STORAGE_KEY_USER);
+            if (userData) {
+                const name = JSON.parse(userData).name;
+                if (name && name.trim()) {
+                    const chatMessages = document.getElementById('chatMessages');
+                    const firstMsg = chatMessages.querySelector('.ai-message p');
+                    if (firstMsg && !firstMsg.getAttribute('data-personalized')) {
+                        firstMsg.innerHTML = `Olá, ${name}! Que bom te ver por aqui no Recife Hub AI 🤖<br>Como posso te ajudar com as rotas hoje?`;
+                        firstMsg.setAttribute('data-personalized', 'true');
+                    }
+                }
+            }
+        });
+    }
+
+    if (closeChatBtn) {
+        closeChatBtn.addEventListener('click', () => {
+            chatAssistant.classList.remove('active');
+        });
+    }
+
+    if (sendChatBtn && chatInput) {
+        sendChatBtn.addEventListener('click', handleUserChatMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserChatMessage();
+        });
+    }
 }
 
 function renderSearchDropdown(query = '') {
@@ -455,6 +496,189 @@ function renderFavorites() {
             
         favoritesList.appendChild(li);
     });
+}
+
+// ==========================================
+// AI Chat Assistant Logic (Recife Hub AI)
+// ==========================================
+
+let chatHistory = [];
+
+function getSystemPrompt() {
+    const routeNames = busRoutes.map(r => r.name).join(', ');
+    return `Você é o Recife Hub AI, um assistente virtual especialista no transporte público do Recife. 
+    O Grand Recife Consórcio é o responsável pelo transporte. 
+    
+    ROTAS DISPONÍVEIS NO APP: ${routeNames}.
+    
+    INSTRUÇÕES:
+    1. Ajude os usuários a encontrarem a melhor forma de se locomover.
+    2. Seja prestativo, claro e conciso (máximo 3 parágrafos).
+    3. Use um tom amigável (estilo WhatsApp).
+    4. IMPORTANTE: Sempre que mencionar uma das "ROTAS DISPONÍVEIS", escreva o nome completo da rota exatamente como listado.
+    5. Se não tiver certeza de algo, oriente o usuário a verificar o mapa ou usar a busca.`;
+}
+
+// Initialize chat history with dynamic prompt
+function initChatHistory() {
+    chatHistory = [
+        { role: "system", content: getSystemPrompt() }
+    ];
+}
+
+async function handleUserChatMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Ensure history is initialized with current routes
+    if (chatHistory.length === 0) initChatHistory();
+
+    // Remove text from input
+    input.value = '';
+
+    // Append user message to UI
+    appendMessage(text, 'user-message');
+    
+    // Add to history
+    chatHistory.push({ role: "user", content: text });
+
+    // Show typing indicator
+    showTypingIndicator();
+
+    try {
+        const responseText = await fetchGroqCompletion(chatHistory);
+        
+        // Remove typing indicator before showing result
+        hideTypingIndicator();
+
+        // Append AI message
+        appendMessage(responseText, 'ai-message');
+        
+        // Add to history
+        chatHistory.push({ role: "assistant", content: responseText });
+
+        // Auto-detect routes to highlight
+        detectAndHighlightRoutes(responseText);
+
+    } catch (e) {
+        hideTypingIndicator();
+        appendMessage("Desculpe, estou com problemas técnicos no momento. Tente novamente mais tarde.", 'ai-message');
+        console.error("Erro no Chat AI:", e);
+    }
+}
+
+function detectAndHighlightRoutes(text) {
+    // Look for route names in the text
+    const foundRoutes = busRoutes.filter(route => 
+        text.toLowerCase().includes(route.name.toLowerCase())
+    );
+
+    if (foundRoutes.length > 0) {
+        // We could automatically select the first found route or add buttons
+        // For now, let's add a "Ver no Mapa" button to the last message if routes found
+        const chatMessages = document.getElementById('chatMessages');
+        const lastMsg = chatMessages.lastElementChild;
+        
+        if (lastMsg && lastMsg.classList.contains('ai-message')) {
+            const btnContainer = document.createElement('div');
+            btnContainer.style.marginTop = '10px';
+            btnContainer.style.display = 'flex';
+            btnContainer.style.flexWrap = 'wrap';
+            btnContainer.style.gap = '8px';
+
+            foundRoutes.forEach(route => {
+                const btn = document.createElement('button');
+                btn.className = 'history-route-action';
+                btn.style.padding = '6px 10px';
+                btn.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> Ver ${route.name}`;
+                btn.onclick = () => {
+                    selectRoute(route);
+                    if (window.innerWidth < 768) {
+                        document.getElementById('chatAssistant').classList.remove('active');
+                    }
+                };
+                btnContainer.appendChild(btn);
+            });
+            lastMsg.appendChild(btnContainer);
+        }
+    }
+}
+
+function appendMessage(text, className) {
+    const chatMessages = document.getElementById('chatMessages');
+    
+    const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${className}`;
+    
+    // Replace newlines with <br> for HTML rendering
+    const formattedText = text.replace(/\\n/g, '<br>');
+
+    msgDiv.innerHTML = `
+        <p>${formattedText}</p>
+        <span class="message-time">${time}</span>
+    `;
+
+    chatMessages.appendChild(msgDiv);
+    
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTypingIndicator() {
+    const chatMessages = document.getElementById('chatMessages');
+    const indicator = document.createElement('div');
+    indicator.className = 'message ai-message typing-indicator-container';
+    indicator.id = 'typingIndicator';
+    indicator.innerHTML = `
+        <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
+    chatMessages.appendChild(indicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
+async function fetchGroqCompletion(messages) {
+    // Uses the API Key from CONFIG in config.js
+    if (!CONFIG || !CONFIG.GROQ_API_KEY) {
+        throw new Error('GROQ_API_KEY não configurada no config.js');
+    }
+
+    const payload = {
+        model: "llama-3.1-8b-instant",
+        messages: messages,
+        temperature: 0.5,
+        max_tokens: 500
+    };
+
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${CONFIG.GROQ_API_KEY}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Erro da API: ${errorData.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
 }
 
        

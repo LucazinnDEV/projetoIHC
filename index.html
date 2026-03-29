@@ -45,6 +45,9 @@
         </div>
 
         <div class="nav-actions">
+            <button class="icon-btn ai-nav-btn" id="toggleAiBtn" title="Assistente de IA">
+                <i class="fa-solid fa-robot"></i>
+            </button>
             <button class="icon-btn" id="profileBtn" title="Meu Perfil">
                 <i class="fa-regular fa-circle-user"></i>
             </button>
@@ -69,6 +72,42 @@
             </button>
         </div>
     </main>
+
+    <!-- AI Chat Assistant (Recife Hub AI) Left Aligned -->
+    <div class="chat-assistant-container" id="chatAssistant">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-avatar">
+                    <i class="fa-solid fa-robot"></i>
+                    <span class="online-dot"></span>
+                </div>
+                <div>
+                    <h3 class="chat-title">Recife Hub AI</h3>
+                    <span class="chat-status">Responde em segundos</span>
+                </div>
+            </div>
+            <button class="chat-close-btn" id="closeChatBtn" title="Fechar Lateral">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <p>Olá! Sou o Recife Hub AI 🤖<br>Posso te ajudar a encontrar as melhores rotas de ônibus pelo Recife. Pra onde você quer ir?</p>
+                <span class="message-time">Agora</span>
+            </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Pergunte sobre uma rota..." autocomplete="off">
+            <button class="chat-send-btn" id="sendChatBtn">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 
     <!-- Profile Modal (Glassmorphism overlay) -->
     <div class="modal-overlay" id="profileModal">
@@ -122,6 +161,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- App JS -->
+    <script src="js/config.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
