@@ -17,9 +17,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     initMap();
     initUI();
     await loadData();
+
+    // Carregar informações do terminal se estiver na página terminal
+    if (window.location.pathname.includes('terminal.html')) {
+        loadTerminalInfo();
+    }
 });
 
 function initMap() {
+    // Não inicializar mapa se não estiver em index.html
+    if (!document.getElementById('map')) return;
+
     map = L.map('map', { zoomControl: false }).setView(RECIFE_ANTIGO_COORDS, 15);
     L.control.zoom({ position: 'topright' }).addTo(map);
 
@@ -80,6 +88,9 @@ async function loadData() {
 }
 
 function drawAllRoutes() {
+    // Não desenhar rotas se não estiver em index.html (sem mapa)
+    if (!map) return;
+
     busRoutes.forEach(route => {
         const polyline = L.polyline(route.path, {
             color: route.color,
@@ -649,6 +660,51 @@ function hideIntegrationInfo() {
     }
 }
 
-//mostrar informações do terminal
-function showTerminalInfo(terminal) {}
+//mostrar informações do terminal - navega para página terminal
+function showTerminalInfo(terminal) {
+    localStorage.setItem('selectedTerminal', JSON.stringify({ name: terminal }));
+    window.location.href = 'terminal.html';
+}
+
+// Carregar informações do terminal na página terminal.html
+function loadTerminalInfo() {
+    const terminalData = localStorage.getItem('selectedTerminal');
+    if (!terminalData) return;
+
+    const { name: terminalName } = JSON.parse(terminalData);
+    const routesUsingTerminal = busRoutes.filter(route => route.terminal === terminalName);
+
+    // Atualizar título do terminal
+    const headerTitle = document.querySelector('.header-title h2');
+    if (headerTitle) {
+        headerTitle.textContent = terminalName;
+    }
+
+    // Atualizar container de linhas
+    const busHereContainer = document.querySelector('.bus-here-container');
+    if (busHereContainer) {
+        busHereContainer.innerHTML = '';
+
+        if (routesUsingTerminal.length === 0) {
+            busHereContainer.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:20px;">Nenhuma rota disponível neste terminal</p>';
+        } else {
+            routesUsingTerminal.forEach(route => {
+                const busDiv = document.createElement('div');
+                busDiv.className = 'bus_name';
+                busDiv.innerHTML = `
+                    <div id="color" style="background:${route.color}"></div>
+                    <div class="bus_container_favorites">
+                        <p>${route.name}</p>
+                        <i class="fa-regular fa-star"></i>
+                    </div>
+                `;
+                busDiv.addEventListener('click', () => {
+                    selectRoute(route);
+                    window.location.href = 'index.html';
+                });
+                busHereContainer.appendChild(busDiv);
+            });
+        }
+    }
+}
 
