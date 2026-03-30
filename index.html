@@ -48,6 +48,10 @@
             <button class="icon-btn ai-nav-btn" id="toggleAiBtn" title="Assistente de IA">
                 <i class="fa-solid fa-robot"></i>
             </button>
+            <!-- Botão favoritos na navbar: abre modal já na aba Favoritos  -->
+            <button class="icon-btn fav-nav-btn" id="favNavBtn" title="Meus Favoritos">
+                <i class="fa-solid fa-star"></i>
+            </button>
             <button class="icon-btn" id="profileBtn" title="Meu Perfil">
                 <i class="fa-regular fa-circle-user"></i>
             </button>
@@ -157,6 +161,28 @@
         </div>
     </div>
 </div>
+
+    <!-- Sidebar unificada: rotas de ônibus -->
+    <div id="infoSidebar" class="info-sidebar">
+        <button class="sidebar-close-btn" id="sidebarCloseBtn">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        <div class="sidebar-header">
+            <div class="sidebar-icon"></div>
+            <h2 class="sidebar-title"></h2>
+        </div>
+        <div class="sidebar-body">
+        </div>
+    </div>
+
+    <!-- Painel lateral de informações da rota  -->
+    <div id="routeInfoPanel" class="route-panel">
+        <button id="closePanelBtn" class="close-panel-btn">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        <div class="panel-content" id="panelContent">
+        </div>
+    </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
