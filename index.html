@@ -185,24 +185,14 @@
     </div>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-item active" id="navHome" data-tab="home">
+    <div class="bottom-nav" id="bottomNav">
+        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home" onclick="window.location.href='index.html'">
             <i class="fa-solid fa-house"></i>
-            <span>Home</span>
         </button>
-        <button class="bottom-nav-item" id="navFavoritos" data-tab="favoritos">
-            <i class="fa-solid fa-star"></i>
-            <span>Favoritos</span>
-        </button>
-        <button class="bottom-nav-item" id="navLinhas" data-tab="linhas">
+        <button class="bottom-nav-btn linhas-nav-btn" id="navLinhas" title="Linhas" onclick="window.location.href='linhas.html'">
             <i class="fa-solid fa-route"></i>
-            <span>Linhas</span>
         </button>
-        <button class="bottom-nav-item" id="navMenu" data-tab="menu">
-            <i class="fa-solid fa-bars"></i>
-            <span>Menu</span>
-        </button>
-    </nav>
+    </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
