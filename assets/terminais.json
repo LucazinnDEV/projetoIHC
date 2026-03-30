@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "T.I. Recife",
+        "integration": "Yes",
+        "integration_place": "Estação Recife",
+        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-recife-frente.png"
+        ]
+    }
+]

@@ -1,4 +1,8 @@
-
+.terminal-info-container{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
 .terminal-header {
     display: flex;
     flex-direction: column;

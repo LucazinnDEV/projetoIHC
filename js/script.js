@@ -650,15 +650,36 @@ function hideIntegrationInfo() {
 }
 
 //mostrar informações do terminal
-function showTerminalInfo(terminal) {
+async function showTerminalInfo(terminalName) {
     const detailedInfo = document.getElementById('detailedInfo');
     if (!detailedInfo) return;
+
+    let terminalData = {
+        name: terminalName,
+        integration: 'Unknown',
+        'other-info': 'Nenhuma informação adicional disponível para este terminal.'
+    };
+
+    try {
+        const response = await fetch('assets/terminais.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const terminals = await response.json();
+        const foundTerminal = Array.isArray(terminals)
+            ? terminals.find(item => item.name === terminalName)
+            : null;
+
+        if (foundTerminal) {
+            terminalData = foundTerminal;
+        }
+    } catch (error) {
+        console.error("Error loading terminal data:", error);
+    }
 
     //apagar conteudo anterior
     detailedInfo.innerHTML = '';
 
     // Buscar todas as rotas que usam este terminal
-    const routesUsingTerminal = busRoutes.filter(route => route.terminal === terminal);
+    const routesUsingTerminal = busRoutes.filter(route => route.terminal === terminalName);
 
     // Criar HTML das rotas
     const routesHtml = routesUsingTerminal.length > 0
@@ -681,12 +702,12 @@ function showTerminalInfo(terminal) {
                     <i class="fa-solid fa-angle-left"></i>
                     <p>Voltar</p>
                 </a>
-                <h2>${terminal}</h2>
+                <h2>${terminalData.name || terminalName}</h2>
             </div>
             <section id="galery_container">
                 <div class="galery">
-                    <p style="color:#94a3b8;">Nenhuma imagem disponível para
-                        este terminal.</p>
+                ${terminalData.images && terminalData.images.length > 0 ? terminalData.images.map(img => `<img src="${img}" alt="Imagem do terminal">`).join('') : `<p style="color:#94a3b8;">Nenhuma imagem disponível para
+                        este terminal.</p>`}
                 </div>
             </section>
         </section>
@@ -696,12 +717,13 @@ function showTerminalInfo(terminal) {
             <div class="bus-here-container">
                     ${routesHtml}
                 </div>
-            </div>
-            <div class="integration"></div>
+            <hr>
+            ${terminalData.integration === 'Yes' ? `<div class="integration">
+                <p class="integration-info-title">Integração com a ${terminalData.integration_place}</p>
+            </div>` : ''}
             <div class="other-info">
                 <p class="other-info-title">Outras informações</p>
-                <p style="color:#94a3b8;">Nenhuma informação adicional disponível para
-                    este terminal.</p>
+                <p style="color:#94a3b8;">${terminalData['other-info'] || 'Nenhuma informação adicional disponível para este terminal.'}</p>
             </div>
             </section>
             </div>
@@ -714,8 +736,8 @@ function hideTerminalInfo() {
 
     const terminalInfoDiv = detailedInfo.querySelector('.terminal-info-container');
     if (terminalInfoDiv) {
-       terminalInfoDiv.remove();
-       showLineInfo(busRoutes.find(r => r.id === selectedRouteId));
+        terminalInfoDiv.remove();
+        showLineInfo(busRoutes.find(r => r.id === selectedRouteId));
     }
 }
 
