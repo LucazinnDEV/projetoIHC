@@ -32,6 +32,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     initUI();
     await loadData();
     initGeolocation();
+    
+    // Check auto-select
+    const autoSelectId = sessionStorage.getItem('recifeHub_autoSelectRoute');
+    if (autoSelectId) {
+        sessionStorage.removeItem('recifeHub_autoSelectRoute');
+        const targetRoute = busRoutes.find(r => r.id === autoSelectId || r.id.toString() === autoSelectId.toString());
+        if (targetRoute) {
+            selectRoute(targetRoute);
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = targetRoute.name;
+        }
+    }
 });
 
 function initMap() {

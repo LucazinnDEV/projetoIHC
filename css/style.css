@@ -1363,3 +1363,100 @@ body {
         right: auto;
     }
 }
+
+/* ========== BOTTOM NAVIGATION BAR ========== */
+.bottom-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    z-index: 2000;
+}
+
+.bottom-nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 1.35rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.bottom-nav-btn:hover {
+    transform: translateY(-3px);
+}
+
+.bottom-nav-btn:active {
+    transform: translateY(0) scale(0.95);
+}
+
+/* Home button */
+.home-nav-btn {
+    color: #3b82f6;
+}
+.home-nav-btn:hover {
+    background: rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+/* Linhas button */
+.linhas-nav-btn {
+    color: var(--primary);
+}
+.linhas-nav-btn:hover {
+    background: rgba(79, 70, 229, 0.12);
+    color: var(--primary-hover);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+/* Favoritos button */
+.fav-bottom-btn {
+    color: #f59e0b;
+}
+.fav-bottom-btn:hover {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+/* Chatbot button */
+.ai-bottom-btn {
+    color: #059669;
+}
+.ai-bottom-btn:hover {
+    background: rgba(5, 150, 105, 0.12);
+    color: #047857;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+
+/* Responsive: Bottom nav on mobile */
+@media (max-width: 768px) {
+    .bottom-nav {
+        bottom: 12px;
+        gap: 12px;
+        padding: 8px 16px;
+    }
+    .bottom-nav-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+    }
+}
