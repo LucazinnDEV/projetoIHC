@@ -485,6 +485,11 @@ body {
     width: 100%;
     justify-content: space-between;
 }
+
+.fa-circle-info{
+    cursor: pointer;
+}
+
 .integration-container .info-label, .integration-more-info i, .fa-ticket{
     color: var(--secondary);
 }

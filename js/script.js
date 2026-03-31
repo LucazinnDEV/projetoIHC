@@ -13,15 +13,8 @@ let routeStopMarkers = [];       // marcadores numerados das paradas da rota sel
 let userCoords = null;           // { lat, lng } do usuário
 let currentSelectedRoute = null; // rota atualmente selecionada
 
-// Terminais fixos usados para calcular paradas próximas (add em terminais.json)
-const TERMINALS = [
-    { name: 'TI Joana Bezerra',  lat: -8.080956, lng: -34.897512 },
-    { name: 'TI Aeroporto',      lat: -8.129722, lng: -34.923056 },
-    { name: 'TI Recife',         lat: -8.063889, lng: -34.871111 },
-    { name: 'Shopping RioMar',   lat: -8.080897, lng: -34.897078 },
-    { name: 'Recife Antigo',     lat: -8.062778, lng: -34.871111 }
-];
-
+// Terminais fixos usados para calcular paradas próximas (em terminais.json)
+const TERMINALS = fetch('assets/terminais.json').then(res => res.json());
 
 // Constants
 const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
@@ -373,7 +366,7 @@ function openInfoSidebar(type, data) {
                     <div class="info-label">Terminal</div>
                     <div class="info-value">${data.terminal || '—'}</div>
                 </div>
-               <div class="terminal-info-icon">
+               <div class="terminal-info-icon" onclick="openTerminalInfo(${data.terminal})">
                <i class="fa-solid fa-circle-info"></i>
                 </div>
                 </div>
@@ -416,6 +409,10 @@ function openInfoSidebar(type, data) {
                 <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
                 ${isFav ? 'Favoritado' : 'Favoritar rota'}
             </button>
+
+            <div id="terminalInfoBox" class="terminal-info-box" style="display:none;">
+            </div>
+
         `;
     }
 
@@ -424,6 +421,62 @@ function openInfoSidebar(type, data) {
 
 function closeInfoSidebar() {
     document.getElementById('infoSidebar').classList.remove('active');
+}
+
+function openTerminalInfo(terminalName) {
+    const terminalInfoBox = document.getElementById('terminalInfoBox');
+    const sideBarHeader = document.querySelector('.sidebar-header');
+    const sideBarBody = document.querySelector('.sidebar-body');
+    const terminalData = TERMINALS.find(t => t.name === terminalName);
+
+    if (!terminalData) return;
+
+    sideBarHeader.style.display = 'none';
+    sideBarBody.style.display = 'none';
+    terminalInfoBox.style.display = 'block';
+    terminalInfoBox.innerHTML = `
+    <section class="terminal-header">
+            <div class="header-title">
+                <a href="#" onclick="document.getElementById('terminalInfoBox').style.display='none'; return false;" class="back-link">
+                    <i class="fa-solid fa-angle-left"></i>
+                    <p>Voltar</p>
+                </a>
+                <h2>${terminalData.name}</h2>
+            </div>
+            <section id="galery_container">
+                <div class="galery">
+                    <p style="color:#94a3b8;">Nenhuma imagem disponível para
+                        este terminal.</p>
+                </div>
+            </section>
+        </section>
+
+        <section class="terminal-main-info">
+            <p class="main-info-title">Linhas disponíveis por aqui:</p>
+            <div class="bus-here-container">
+                    <div class="bus_name">
+                        <div id="color"></div>
+                        <div class="bus_container_favorites">
+                            <p>${route.name}</p>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="bus_name">
+                        <div id="color"></div>
+                        <div class="bus_container_favorites">
+                            <p>${route.name}</p>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                </div>
+            </div>
+            <div class="integration"></div>
+            <div class="other-info">
+                <p class="other-info-title">Outras informações</p>
+                <p style="color:#94a3b8;">Nenhuma informação adicional disponível para
+                    este terminal.</p>
+            </div>
+        </section>
+    `
 }
 
 function toggleSidebarFavorite() {
