@@ -3238,7 +3238,7 @@
   },
   {
     "id": 9776190,
-    "name": "117 - T.I. Recife (PCR/Cabugá) (Circular)",
+    "name": "117 - T.I. Recife (PCR/Cabugá) - (Circular)",
     "color": "#ffff00",
     "path": [
       [
@@ -5270,8 +5270,8 @@
     ],
     "integration": "Yes",
     "integration_place": "Estação Recife",
-    "accessibility": "Yes",
-    "air_conditioning": "Yes",
+    "accessible": true,
+    "airConditioning": true,
     "images": [
       "assets/imgs/bus/117/117-circular.png",
       "assets/imgs/bus/117/117-frente.jpg",

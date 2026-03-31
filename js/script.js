@@ -539,12 +539,12 @@ function showLineInfo(route) {
                 <section id="other_info_container">
                 ${route.integration === 'Yes' ? `<div class="integration">Integração com ${route.integration_place}  <i class="fa-regular fa-circle-question" onclick="showIntegrationInfo('${route.integration_place}')"></i></div>` : ''}
                     <div class="bonus">
-                    ${route.accessibility === 'Yes' ? `
+                    ${route.accessible === true ? `
                         <div class="acessibility">
                             <i class="fa-brands fa-accessible-icon"></i>
                             <p>Acessibilidade</p>
                         </div>` : ''}
-                    ${route.air_conditioning === 'Yes' ? `
+                    ${route.airConditioning === true ? `
                         <div class="air_conditioning">
                             <i class="fa-solid fa-snowflake"></i>
                             <p>Ar Condicionado</p>
