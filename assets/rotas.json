@@ -8,6 +8,7 @@
     "frequency": "15-20 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Aeroporto",
     "path": [
       [
         -8.134108580159989,
@@ -903,6 +904,7 @@
     "frequency": "12-18 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Recife",
     "path": [
       [
         -8.068553513010642,
@@ -1381,6 +1383,7 @@
     "frequency": "15-20 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Jaboatão",
     "path": [
       [
         -8.111399470644187,
@@ -2278,6 +2281,7 @@
     "frequency": "80 min",
     "accessible": true,
     "airConditioning": true,
+    "terminal": "Cais de Santa Rita",
     "path": [
       [
         -8.067966194055373,
@@ -4078,6 +4082,7 @@
     "frequency": "10-15 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Joana Bezerra",
     "path": [
       [
         -8.072338035243945,
@@ -4480,6 +4485,7 @@
     "frequency": "15-20 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "Terminal de Torre",
     "path": [
       [
         -8.041978995755258,
