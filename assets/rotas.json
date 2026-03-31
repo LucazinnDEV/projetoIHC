@@ -2,12 +2,13 @@
   {
     "id": "026",
     "name": "026 - TI Aeroporto / TI Joana Bezerra",
-    "color": "#BA7517",
+    "color": "#ee0000",
     "fare": 4.5,
     "duration": 30,
     "frequency": "15-20 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Aeroporto",
     "path": [
       [
         -8.134108580159989,
@@ -880,24 +881,30 @@
     ],
     "stops": [
       "TI Aeroporto",
-      "Av. Mascarenhas de Morais",
-      "Shopping Recife",
       "Av. Conselheiro Aguiar (Boa Viagem)",
-      "Pina / Parque Dona Lindu",
-      "Largo do Pina",
-      "Afogados",
+      "JCPM",
+      "Praça Abelardo Rijo",
+      "Fórum Desembargador Rodolfo Aureliano",
       "TI Joana Bezerra"
+    ],
+    "integration": true,
+    "integration_place": "Estação Joana Bezerra e Estação Aeroporto",
+    "images": [
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"
     ]
   },
   {
     "id": "117",
     "name": "117 - TI Recife (PCR/Cabugá) - Circular",
-    "color": "#639922",
+    "color": "#ffbb00",
     "fare": 4.5,
     "duration": 40,
     "frequency": "12-18 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Recife",
     "path": [
       [
         -8.068553513010642,
@@ -1349,25 +1356,34 @@
       ]
     ],
     "stops": [
-      "TI Recife",
-      "Av. Dantas Barreto",
-      "Praça do Carmo (Recife Antigo)",
-      "Av. Marquês de Olinda",
-      "Marco Zero",
-      "Cais de Santa Rita",
-      "Av. Alfredo Lisboa",
-      "TI Recife"
+      "Estação Central",
+      "Porto Digital",
+      "CESAR School",
+      "Prefeitura do Recife",
+      "Av. Cruz Cabugá",
+      "Shopping Tacaruna",
+      "Hospital de Câncer de Pernambuco",
+      "Parque Treze de Maio",
+      "Agência Central dos Correios"
+    ],
+    "integration": true,
+    "integration_place": "Estação Recife",
+    "images": [
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"
     ]
   },
   {
     "id": "200",
     "name": "200 - TI Jaboatão (Parador)",
-    "color": "#D4537E",
+    "color": "#ffbb00",
     "fare": 4.5,
     "duration": 35,
     "frequency": "15-20 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Jaboatão",
     "path": [
       [
         -8.111399470644187,
@@ -2240,24 +2256,32 @@
     ],
     "stops": [
       "TI Jaboatão",
-      "Av. Barreto de Menezes",
-      "Cavaleiro",
-      "Prazeres",
-      "Jaboatão Centro",
-      "Av. Caxangá",
-      "Derby",
-      "TI Recife"
-    ]
+      "UPA Engenho Velho",
+      "14º Batalhão de Infantaria Motorizado",
+      "Estação Tejipió",
+      "Mix Matheus Areias",
+      "Colégio Visão",
+      "Estação Largo da Paz",
+      "Cais de Santa Rita",
+      "Pátio de São Pedro"
+    ],
+    "integration": true,
+    "integration_place": "Estação Jaboatão",
+    "images": [
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"]
   },
   {
     "id": "195",
-    "name": "195 - Porto de Galinhas",
-    "color": "#0A7D6C",
+    "name": "195 - Porto de Galinhas (Opcional)",
+    "color": "#2E75B6",
     "fare": 22.5,
     "duration": 90,
     "frequency": "80 min",
     "accessible": true,
     "airConditioning": true,
+    "terminal": "Cais de Santa Rita",
     "path": [
       [
         -8.067966194055373,
@@ -4033,23 +4057,32 @@
       ]
     ],
     "stops": [
-      "TI Recife",
-      "Shopping Recife (Boa Viagem)",
-      "Ponte dos Carvalhos",
+      "Cais de Santa Rita",
+      "Estação Recife",
+      "Av. Eng. Domingos Ferreira",
+      "Aeroporto Internacional dos Guararapes",
       "Cabo de Santo Agostinho",
-      "Ipojuca",
+      "Shopping Costa Dourada",
+      "IFPE Campus Ipojuca",
       "Porto de Galinhas (Centro)"
-    ]
+    ],
+    "integration": false,
+    "integration_place": "-",
+    "images": [
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"]
   },
   {
     "id": "021",
     "name": "021 - TI Joana Bezerra / Shopping RioMar",
-    "color": "#2E75B6",
+    "color": "#999",
     "fare": 4.5,
     "duration": 25,
     "frequency": "10-15 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "T.I. Joana Bezerra",
     "path": [
       [
         -8.072338035243945,
@@ -4434,24 +4467,25 @@
     ],
     "stops": [
       "TI Joana Bezerra",
-      "Av. Caxangá",
-      "Av. Cruz Cabugá",
-      "Rua da Aurora",
-      "Recife Antigo",
-      "Av. Boa Viagem",
-      "Pina",
       "Shopping RioMar"
-    ]
+    ],
+    "integration": true,
+    "integration_place": "Estação Joana Bezerra",
+    "images": [
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"]
   },
   {
     "id": "414",
-    "name": "414 - Torre",
+    "name": "414 - Torre (Rui Barbosa)",
     "color": "#1E5A96",
     "fare": 4.5,
     "duration": 25,
     "frequency": "15-20 min",
     "accessible": true,
     "airConditioning": false,
+    "terminal": "Terminal de Torre",
     "path": [
       [
         -8.041978995755258,
@@ -4999,14 +5033,19 @@
       ]
     ],
     "stops": [
-      "TI Joana Bezerra",
-      "Afogados",
-      "Av. Agamenon Magalhães",
+      "Cordeiro",
       "Torre",
-      "Madalena",
+      "Graças",
+      "Praça do Derby",
       "Av. Conde da Boa Vista",
-      "Centro (Cabugá)",
-      "TI Recife"
-    ]
+      "Av. Nossa Sra. do Carmo",
+      "Praça do Diário"
+    ],
+    "integration": false,
+    "integration_place": "-",
+    "images": [
+      "assets/imgs/bus/117/117-circular.png",
+      "assets/imgs/bus/117/117-frente.jpg",
+      "assets/imgs/bus/117/117-costas.jpg"]
   }
 ]

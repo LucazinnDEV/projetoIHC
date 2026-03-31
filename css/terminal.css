@@ -1,0 +1,46 @@
+.terminal-info-container{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.terminal-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.header-title a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 300;
+}
+
+.terminal-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.terminal-main-info .main-info-title, .other-info-title{
+    color: #0f172a;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.bus-here-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.other-info{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}

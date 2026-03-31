@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recife Hub - Ônibus no Recife Antigo</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/terminal.css">
+</head>
+
+<body>
+    <!-- Glass Navbar -->
+    <nav class="glass-navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-bus-simple"></i>
+            </div>
+            <span class="brand-text">Recife Hub</span>
+        </div>
+
+        <div class="nav-center">
+            <div class="search-container">
+                <i class="fa-solid fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar rota de ônibus..."
+                    autocomplete="off"><!-- pesquisar linhas -->
+                <i class="fa-solid fa-times clear-search" id="clearSearchBtn" style="display: none;"></i>
+
+                <div class="search-dropdown" id="searchDropdown">
+                    <div class="dropdown-header" id="dropdownHeader">Rotas Recentes</div>
+                    <ul class="dropdown-list" id="dropdownList">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <button class="icon-btn" id="profileBtn" title="Meu Perfil">
+                <i class="fa-regular fa-circle-user"></i>
+            </button>
+            <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+    <main>
+        <section class="terminal-header">
+            <div class="header-title">
+                <a href="javascript:history.back()">
+                    <i class="fa-solid fa-angle-left"></i>
+                    <p>Voltar</p>
+                </a>
+                <h2>Nome do Terminal</h2>
+            </div>
+            <section id="galery_container">
+                <div class="galery">
+                    <p style="color:#94a3b8;">Nenhuma imagem disponível para
+                        este terminal.</p>
+                </div>
+            </section>
+        </section>
+
+        <section class="terminal-main-info">
+            <p class="main-info-title">Linhas disponíveis por aqui:</p>
+            <div class="bus-here-container">
+                    <div class="bus_name">
+                        <div id="color"></div>
+                        <div class="bus_container_favorites">
+                            <p>${route.name}</p>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="bus_name">
+                        <div id="color"></div>
+                        <div class="bus_container_favorites">
+                            <p>${route.name}</p>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                </div>
+            </div>
+            <div class="integration"></div>
+            <div class="other-info">
+                <p class="other-info-title">Outras informações</p>
+                <p style="color:#94a3b8;">Nenhuma informação adicional disponível para
+                    este terminal.</p>
+            </div>
+        </section>
+    </main>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- App JS -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>

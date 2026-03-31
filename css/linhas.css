@@ -1,0 +1,235 @@
+:root {
+    --line-title-size: 1.125rem;
+    --line-text-size: 0.95rem;
+    --line-muted-size: 0.875rem;
+}
+
+body {
+    overflow-y: auto;
+    background-color: #f8fafc;
+    padding-bottom: 90px;
+}
+
+.pg-header {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 20px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.pg-header h1 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0;
+}
+
+.pg-header i {
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.linhas-container {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.linha-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.linha-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.linha-header {
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+}
+
+.linha-numero {
+    font-size: 1.25rem;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 6px 14px;
+    border-radius: 10px;
+    letter-spacing: 0.05em;
+}
+
+.linha-nome {
+    font-size: 1.15rem;
+    font-weight: 700;
+    flex: 1;
+    line-height: 1.2;
+}
+
+.linha-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+}
+
+.linha-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+.linha-stat i {
+    color: #94a3b8;
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.linha-stat span {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.linha-badges {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.linha-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.linha-badge.active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.linha-btn {
+    margin: 10px 20px 20px;
+    padding: 14px;
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.linha-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.bottom-nav-btn {
+    color: #94a3b8;
+}
+
+.linhas-nav-btn {
+    color: var(--primary);
+    background: rgba(79, 70, 229, 0.12);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+/* galeria */
+#gallery_container,
+#galery_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.galery {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+}
+
+.galery img {
+    width: 100%;
+    max-width: 430px;
+    min-width: 270px;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 20px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+}
+
+.top_stops::-webkit-scrollbar,
+.galery::-webkit-scrollbar {
+    height: 6px;
+}
+
+.top_stops::-webkit-scrollbar-thumb,
+.galery::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.top_stops.is-dragging,
+.galery.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+
+@media (max-width: 768px) {
+    :root {
+        --line-title-size: 1rem;
+        --line-text-size: 0.9rem;
+        --line-muted-size: 0.82rem;
+    }
+
+    .galery img {
+        min-width: 245px;
+        height: 190px;
+    }
+}

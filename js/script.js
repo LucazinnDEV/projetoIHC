@@ -4,6 +4,8 @@ let map;
 let routeLayers = {};
 let allStopsLayer;
 let highlightedLayerGroup;
+let currentFavoriteBtn = null
+let selectedRouteId = null;
 
 let userMarker = null;           // marcador azul  do usuário
 let nearbyStopMarkers = [];      // marcadores de terminais próximos
@@ -11,7 +13,7 @@ let routeStopMarkers = [];       // marcadores numerados das paradas da rota sel
 let userCoords = null;           // { lat, lng } do usuário
 let currentSelectedRoute = null; // rota atualmente selecionada
 
-// Terminais fixos usados para calcular paradas próximas
+// Terminais fixos usados para calcular paradas próximas (add em terminais.json)
 const TERMINALS = [
     { name: 'TI Joana Bezerra',  lat: -8.080956, lng: -34.897512 },
     { name: 'TI Aeroporto',      lat: -8.129722, lng: -34.923056 },
@@ -364,6 +366,35 @@ function openInfoSidebar(type, data) {
                     <div class="info-value">${data.airConditioning ? 'Sim' : 'Não'}</div>
                 </div>
             </div>
+            <div class="info-item">
+                <i class="fa-solid fa-bus" style="color:#64748b;"></i>
+                <div class="terminal-info-container">
+                <div class="terminal-name">
+                    <div class="info-label">Terminal</div>
+                    <div class="info-value">${data.terminal || '—'}</div>
+                </div>
+               <div class="terminal-info-icon">
+               <i class="fa-solid fa-circle-info"></i>
+                </div>
+                </div>
+            </div>
+            ${data.integration ?
+                ` 
+                <div class="info-item">
+                <i class="fa-solid fa-ticket"></i>
+                <div class="integration-container">
+                <div class="info-label">
+                Possui integração com ${data.integration_place}
+                </div>
+                <div class="integration-more-info">
+                <i class="fa-solid fa-circle-question"></i>
+                </div>
+                </div>
+                
+                </div>
+            </div>
+                `: ""
+            }
 
             ${nearbyHTML}
 
@@ -630,7 +661,7 @@ function initUI() {
     });
 
     closeProfileBtn.addEventListener('click', () => profileModal.classList.remove('active'));
-    
+
     profileModal.addEventListener('click', (e) => {
         if (e.target === profileModal) profileModal.classList.remove('active');
     });
@@ -651,15 +682,15 @@ function initUI() {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
+
             btn.classList.add('active');
             const tab = btn.dataset.tab;
             document.getElementById(`${tab}Tab`).classList.add('active');
-                if(tab === 'favorites'){
-                    renderFavorites();  
-                }
-            });
-         });
+            if (tab === 'favorites') {
+                renderFavorites();
+            }
+        });
+    });
     // Mobile menu toggle
     document.getElementById('mobileMenuBtn').addEventListener('click', () => {
         document.querySelector('.nav-center').classList.toggle('active');
@@ -711,7 +742,7 @@ function renderSearchDropdown(query = '') {
     const searchDropdown = document.getElementById('searchDropdown');
     const dropdownList = document.getElementById('dropdownList');
     const dropdownHeader = document.getElementById('dropdownHeader');
-    
+
     dropdownList.innerHTML = '';
 
     if (!query) {
@@ -751,7 +782,7 @@ function renderSearchDropdown(query = '') {
             });
         }
     }
-    
+
     searchDropdown.classList.add('active');
 }
 
@@ -783,7 +814,7 @@ function loadProfileData() {
 function renderProfileHistory() {
     const historyList = document.getElementById('profileHistoryList');
     const history = getHistory();
-    
+
     historyList.innerHTML = '';
     if (history.length === 0) {
         historyList.innerHTML = '<li>Nenhuma rota recente. Busque e clique em uma rota no mapa!</li>';
@@ -802,7 +833,7 @@ function renderProfileHistory() {
         li.querySelector('button').addEventListener('click', () => {
             document.getElementById('profileModal').classList.remove('active');
             const fullRoute = busRoutes.find(r => r.id === route.id);
-            if(fullRoute) {
+            if (fullRoute) {
                 selectRoute(fullRoute);
                 document.getElementById('searchInput').value = route.name;
             }
@@ -847,9 +878,9 @@ function showToast(message) {
 function renderFavorites() {
     const favoritesList = document.getElementById('favoritesList');
     const favorites = getFavorites();
-        
-      favoritesList.innerHTML = '';
-        
+
+    favoritesList.innerHTML = '';
+
     if (favorites.length === 0) {
         favoritesList.innerHTML = '<li style="text-align:center;padding:40px;color:#94a3b8;">Nenhuma rota favoritada ainda</li>';
         return;
@@ -868,14 +899,14 @@ function renderFavorites() {
                 </button>
             </div>
          `;
-         // botão ver
-         li.querySelector('.view-favorite-btn').addEventListener('click', () => {
+        // botão ver
+        li.querySelector('.view-favorite-btn').addEventListener('click', () => {
             const route = busRoutes.find(r => r.id === fav.id);
             if (route) {
                 document.getElementById('profileModal').classList.remove('active');
                 selectRoute(route);
-                }
-            });
+            }
+        });
         //botão remover
         li.querySelector('.remove-fav-btn').addEventListener('click', () => {
             let favs = getFavorites();
@@ -884,14 +915,164 @@ function renderFavorites() {
             renderFavorites();
             showToast('Favorito removido');
 
-            if(currentFavoriteBtn){
+            if (currentFavoriteBtn) {
                 currentFavoriteBtn.className = 'favorite-btn';
                 currentFavoriteBtn.innerHTML = '<i class="fa-regular fa-star"></i>';
             }
         });
-            
+
         favoritesList.appendChild(li);
     });
+}
+
+// script para drag horizontal em containers de paradas e galeria de imagens
+function enableHorizontalDrag(container) {
+    if (!container || container.dataset.dragReady === 'true') return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    container.addEventListener('mousedown', (event) => {
+        isDragging = true;
+        startX = event.pageX;
+        startScrollLeft = container.scrollLeft;
+        container.classList.add('is-dragging');
+    });
+
+    container.addEventListener('mousemove', (event) => {
+        if (!isDragging) return;
+        event.preventDefault();
+        const walk = event.pageX - startX;
+        container.scrollLeft = startScrollLeft - walk;
+    });
+
+    const stopDragging = () => {
+        isDragging = false;
+        container.classList.remove('is-dragging');
+    };
+
+    container.addEventListener('mouseleave', stopDragging);
+    container.addEventListener('mouseup', stopDragging);
+    container.dataset.dragReady = 'true';
+}
+//mostrar informações da integração
+function showIntegrationInfo(integrationPlace) {
+    const detailedInfo = document.getElementById('detailedInfo');
+    if (!detailedInfo) return;
+    detailedInfo.innerHTML += `
+    <div class="integration-info-container">
+    <div class="integration-info">
+    <div class="integration-header">
+    <p>Significa que ao utilizar essa linha pagando pelo cartão VEM, não será necessário pagar uma nova passagem para utilizar o metrô na ${integrationPlace} no período de 2 horas.</p>
+    <a href="#">Saiba mais</a>
+    </div>
+    <button class="back-btn" onclick="hideIntegrationInfo()">Ok</button>
+    </div>
+    </div>
+    `
+}
+
+function hideIntegrationInfo() {
+    const detailedInfo = document.getElementById('detailedInfo');
+    if (!detailedInfo) return;
+
+    const integrationInfoDiv = detailedInfo.querySelector('.integration-info-container');
+    if (integrationInfoDiv) {
+        integrationInfoDiv.remove();
+    }
+}
+
+//mostrar informações do terminal
+async function showTerminalInfo(terminalName) {
+    const detailedInfo = document.getElementById('detailedInfo');
+    if (!detailedInfo) return;
+
+    let terminalData = {
+        name: terminalName,
+        integration: 'Unknown',
+        'other-info': 'Nenhuma informação adicional disponível para este terminal.'
+    };
+
+    try {
+        const response = await fetch('assets/terminais.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const terminals = await response.json();
+        const foundTerminal = Array.isArray(terminals)
+            ? terminals.find(item => item.name === terminalName)
+            : null;
+
+        if (foundTerminal) {
+            terminalData = foundTerminal;
+        }
+    } catch (error) {
+        console.error("Error loading terminal data:", error);
+    }
+
+    //apagar conteudo anterior
+    detailedInfo.innerHTML = '';
+
+    // Buscar todas as rotas que usam este terminal
+    const routesUsingTerminal = busRoutes.filter(route => route.terminal === terminalName);
+
+    // Criar HTML das rotas
+    const routesHtml = routesUsingTerminal.length > 0
+        ? routesUsingTerminal.map(route => `
+            <div class="bus_name">
+            <div class="bus_container_favorites">
+                <div id="color" style="background:${route.color}"></div>
+                <p>${route.name}</p>
+                <i class="fa-regular fa-star"></i>
+            </div>
+            </div>
+        `).join('')
+        : '<p style="color:#94a3b8;">Nenhuma rota disponível.</p>';
+
+    detailedInfo.innerHTML += `
+    <div class="terminal-info-container">
+    <section class="terminal-header">
+            <div class="header-title">
+                <a href="#" class="back-btn" onclick="hideTerminalInfo()">
+                    <i class="fa-solid fa-angle-left"></i>
+                    <p>Voltar</p>
+                </a>
+                <h2>${terminalData.name || terminalName}</h2>
+            </div>
+            <section id="galery_container">
+                <div class="galery">
+                ${terminalData.images && terminalData.images.length > 0 ? terminalData.images.map(img => `<img src="${img}" alt="Imagem do terminal">`).join('') : `<p style="color:#94a3b8;">Nenhuma imagem disponível para
+                        este terminal.</p>`}
+                </div>
+            </section>
+        </section>
+
+        <section class="terminal-main-info">
+            <p class="main-info-title">Linhas disponíveis por aqui:</p>
+            <div class="bus-here-container">
+                    ${routesHtml}
+                </div>
+            <hr>
+            ${terminalData.integration === 'Yes' ? `<div class="integration">
+                <p class="integration-info-title">Integração com a ${terminalData.integration_place}</p>
+            </div>` : ''}
+            <div class="other-info">
+                <p class="other-info-title">Outras informações</p>
+                <p style="color:#94a3b8;">${terminalData['other-info'] || 'Nenhuma informação adicional disponível para este terminal.'}</p>
+            </div>
+            </section>
+            </div>
+    `;
+}
+
+function hideTerminalInfo() {
+    const detailedInfo = document.getElementById('detailedInfo');
+    if (!detailedInfo) return;
+
+    const terminalInfoDiv = detailedInfo.querySelector('.terminal-info-container');
+    if (terminalInfoDiv) {
+        terminalInfoDiv.remove();
+        showLineInfo(busRoutes.find(r => r.id === selectedRouteId));
+    }
 }
 
 // ==========================================
@@ -1076,5 +1257,3 @@ async function fetchGroqCompletion(messages) {
     const data = await response.json();
     return data.choices[0].message.content;
 }
-
-       

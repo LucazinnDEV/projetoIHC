@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "T.I. Recife",
+        "integration": true,
+        "integration_place": "Estação Recife",
+        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-recife-frente.png"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "T.I. Joana Bezerra",
+        "integration": true,
+        "integration_place": "Estação Joana Bezerra",
+        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-joana-bezerra-frente.png"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "T.I. Aeroporto",
+        "integration": true,
+        "integration_place": "Estação Aeroporto",
+        "other-info": "Possui banheiros, lanchonetes próximas, wifi gratuito e acesso ao Aeroporto Internacional dos Guararapes.",
+        "images": [
+            "assets/imgs/terminals/ti-aeroporto-frente.png"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Cais de Santa Rita",
+        "integration": false,
+        "integration_place": "-",
+        "other-info": "Não possui banheiros, mas possui lanchonetes próximas, acesso ao comércio local e ao Recife Antigo.",
+        "images": [
+            "assets/imgs/terminals/cais-de-santa-rita-frente.png"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "T.I. Jaboatão",
+        "integration": true,
+        "integration_place": "Estação Jaboatão",
+        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-jaboatao-frente.png"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Terminal de Torre",
+        "integration": false,
+        "integration_place": "-",
+        "other-info": "Não possui banheiros, mas possui acesso à comunidade local.",
+        "images": [
+            "assets/imgs/terminals/terminal-de-torre-frente.png"
+        ]
+    }
+]
