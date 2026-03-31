@@ -850,3 +850,339 @@ body {
 .chat-send-btn:hover {
     background: #047857;
 }
+
+/* ==========================================
+   Nearby Places Recommendations
+   ========================================== */
+
+.nearby-places-container {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    z-index: 1200;
+    pointer-events: none;
+}
+
+/* Category Bar */
+.nearby-category-bar {
+    display: flex;
+    gap: 10px;
+    padding: 12px 20px;
+    overflow-x: auto;
+    pointer-events: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.nearby-category-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.nearby-category-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #334155;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nearby-category-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.nearby-category-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
+    transform: translateY(-1px);
+}
+
+.nearby-category-btn.active i {
+    color: white;
+}
+
+.nearby-category-btn i {
+    font-size: 0.85rem;
+    color: #64748b;
+    transition: color 0.3s;
+}
+
+.nearby-category-btn:hover i {
+    color: var(--primary);
+}
+
+/* Expandable Panel */
+.nearby-panel {
+    max-height: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    margin: 0 16px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: none;
+    pointer-events: auto;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s ease,
+                margin-top 0.3s ease;
+}
+
+.nearby-panel.open {
+    max-height: 420px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-top: -4px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Custom scrollbar for panel */
+.nearby-panel::-webkit-scrollbar { width: 5px; }
+.nearby-panel::-webkit-scrollbar-track { background: transparent; }
+.nearby-panel::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* Panel Header */
+.nearby-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px 10px;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    z-index: 2;
+}
+
+.nearby-panel-header h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nearby-panel-header h3 i {
+    color: var(--primary);
+    font-size: 0.95rem;
+}
+
+.nearby-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Place List */
+.nearby-list {
+    padding: 4px 12px 16px;
+}
+
+/* Place Card */
+.nearby-place-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: slideUp 0.3s ease forwards;
+    opacity: 0;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nearby-place-card:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+}
+
+.nearby-place-card:active {
+    transform: scale(0.98);
+}
+
+/* Place Icon */
+.nearby-place-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.nearby-place-icon.restaurants {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #d97706;
+}
+
+.nearby-place-icon.attractions {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #2563eb;
+}
+
+.nearby-place-icon.cafes {
+    background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+    color: #db2777;
+}
+
+.nearby-place-icon.supermarkets {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #059669;
+}
+
+/* Place Info */
+.nearby-place-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.nearby-place-name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.nearby-place-type {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Distance Badge */
+.nearby-place-distance {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+    background: #eef2ff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    flex-shrink: 0;
+}
+
+.nearby-place-distance i {
+    font-size: 0.7rem;
+}
+
+/* Loading State */
+.nearby-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 30px 20px;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nearby-spinner {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #e0e7ff;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Empty State */
+.nearby-empty {
+    text-align: center;
+    padding: 30px 20px;
+    color: #94a3b8;
+}
+
+.nearby-empty i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #cbd5e1;
+}
+
+.nearby-empty p {
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.nearby-empty span {
+    font-size: 0.82rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nearby-category-bar {
+        padding: 10px 14px;
+        gap: 8px;
+    }
+
+    .nearby-category-btn {
+        padding: 8px 16px;
+        font-size: 0.82rem;
+    }
+
+    .nearby-panel.open {
+        max-height: 320px;
+        margin: 0 10px;
+    }
+
+    .nearby-place-card {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .nearby-place-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+
+    .nearby-place-name {
+        font-size: 0.85rem;
+    }
+
+    .nearby-place-distance {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+}
