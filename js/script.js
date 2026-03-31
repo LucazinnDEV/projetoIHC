@@ -366,6 +366,35 @@ function openInfoSidebar(type, data) {
                     <div class="info-value">${data.airConditioning ? 'Sim' : 'Não'}</div>
                 </div>
             </div>
+            <div class="info-item">
+                <i class="fa-solid fa-bus" style="color:#64748b;"></i>
+                <div class="terminal-info-container">
+                <div class="terminal-name">
+                    <div class="info-label">Terminal</div>
+                    <div class="info-value">${data.terminal || '—'}</div>
+                </div>
+               <div class="terminal-info-icon">
+               <i class="fa-solid fa-circle-info"></i>
+                </div>
+                </div>
+            </div>
+            ${data.integration ?
+                ` 
+                <div class="info-item">
+                <i class="fa-solid fa-ticket"></i>
+                <div class="integration-container">
+                <div class="info-label">
+                Possui integração com ${data.integration_place}
+                </div>
+                <div class="integration-more-info">
+                <i class="fa-solid fa-circle-question"></i>
+                </div>
+                </div>
+                
+                </div>
+            </div>
+                `: ""
+            }
 
             ${nearbyHTML}
 

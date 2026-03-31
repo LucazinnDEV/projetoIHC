@@ -479,6 +479,16 @@ body {
     font-weight: 900;
 }
 
+.terminal-info-container, .integration-container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+.integration-container .info-label, .integration-more-info i, .fa-ticket{
+    color: var(--secondary);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .nav-center {
