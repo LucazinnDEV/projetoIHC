@@ -413,14 +413,23 @@ function openInfoSidebar(type, data) {
 
             <p class="sidebar-section-title">Paradas da linha</p>
             <ul class="panel-stops-list">
-                ${(data.stops || []).map((stop, i, arr) => {
+            ${(data.stops || []).map((stop, i, arr) => {
                 const badge = i === 0 ? 'A' : i === arr.length - 1 ? 'B' : i;
                 return `<li class="panel-stop-item">
-                        <div class="panel-stop-badge" style="background:${data.color}">${badge}</div>
-                        <span>${stop}</span>
-                    </li>`;
+                <div class="panel-stop-badge" style="background:${data.color}">${badge}</div>
+                <span>${stop}</span>
+                </li>`;
             }).join('')}
             </ul>
+            
+            <p class="sidebar-section-title">Galeria</p>
+            <section id="galery_container">
+                <div class="galery">
+                    ${data.images && data.images.length > 0
+                ? data.images.map(img => `<img src="${img}" alt="Imagem do ônibus ${data.name}">`).join('')
+                : `<p class="terminal-empty-state">Nenhuma imagem disponível para este terminal.</p>`}
+                </div>
+            </section>
 
             <!-- Botão favoritar -->
                 <button class="sidebar-fav-btn ${isFav ? 'favorited' : ''}"
