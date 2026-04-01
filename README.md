@@ -1,4 +1,4 @@
-# App Ônibus - Projeto IHC
+# Recife Hub - Ônibus no Recife Antigo
 
 <div align="center">
 
