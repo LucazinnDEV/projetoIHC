@@ -267,28 +267,28 @@ function openRoutePanel(route) {
 
     content.innerHTML = `
         <div class="panel-route-header">
-            <div class="panel-route-color-bar" style="background:${route.color}"></div>
-            <div>
-                <div class="panel-route-name">${route.name}</div>
-                <div class="panel-route-id">Linha ${route.id}</div>
-            </div>
+        <div class="panel-route-color-bar" style="background:${route.color}"></div>
+        <div>
+        <div class="panel-route-name">${route.name}</div>
+        <div class="panel-route-id">Linha ${route.id}</div>
         </div>
-
+        </div>
+        
         ${metaHTML}
-
+        
         <p class="panel-section-title">Paradas da rota</p>
         <ul class="panel-stops-list">
-            ${(route.stops || []).map((stop, i, arr) => {
+        ${(route.stops || []).map((stop, i, arr) => {
         const badge = i === 0 ? 'A' : i === arr.length - 1 ? 'B' : i;
         return `<li class="panel-stop-item">
-                    <div class="panel-stop-badge" style="background:${route.color}">${badge}</div>
-                    <span>${stop}</span>
-                </li>`;
+            <div class="panel-stop-badge" style="background:${route.color}">${badge}</div>
+            <span>${stop}</span>
+            </li>`;
     }).join('')}
         </ul>
-
+        
         ${nearbyHTML}
-    `;
+        `;
 
     panel.classList.add('active');
 }
@@ -316,11 +316,11 @@ function openInfoSidebar(type, data) {
                ${nearbyTerminals.map(t => {
                 const d = haversineDistance(userCoords.lat, userCoords.lng, t.lat, t.lng).toFixed(1);
                 return `<div class="info-item">
-                       <i class="fa-solid fa-bus-simple" style="color:#10b981;"></i>
-                       <div>
-                           <div class="info-label">${t.name}</div>
-                           <div class="info-value" style="font-size:14px;">~${d} km de você</div>
-                       </div>
+                   <i class="fa-solid fa-bus-simple" style="color:#10b981;"></i>
+                   <div>
+                   <div class="info-label">${t.name}</div>
+                   <div class="info-value" style="font-size:14px;">~${d} km de você</div>
+                   </div>
                    </div>`;
             }).join('')}`
             : '';
@@ -330,76 +330,80 @@ function openInfoSidebar(type, data) {
         titleEl.textContent = data.name;
 
         bodyEl.innerHTML = `
-            <div class="route-direction-legend">
+                <div class="route-direction-legend">
                 <div class="direction-item">
-                    <span class="direction-bar" style="background:${data.color}"></span>
-                    <span>Ida</span>
+                <span class="direction-bar" style="background:${data.color}"></span>
+                <span>Ida</span>
                 </div>
+                
+                
                 <div class="direction-item">
-                    <span class="direction-bar" style="background:${returnColor}"></span>
-                    <span>Volta</span>
+                <span class="direction-bar" style="background:${returnColor}"></span>
+                <span>Volta</span>
                 </div>
-            </div>
-            <div class="info-item">
+                </div>
+                
+                <div class="info-item">
                 <i class="fa-solid fa-coins" style="color:#64748b;"></i>
                 <div>
-                    <div class="info-label">Tarifa</div>
-                    <div class="info-value">R$ ${data.fare ? data.fare.toFixed(2) : '—'}</div>
+                <div class="info-label">Tarifa</div>
+                <div class="info-value">R$ ${data.fare ? data.fare.toFixed(2) : '—'}</div>
                 </div>
-            </div>
-            <div class="info-item">
+                </div>
+                <div class="info-item">
                 <i class="fa-solid fa-stopwatch" style="color:#64748b;"></i>
                 <div>
-                    <div class="info-label">Duração estimada</div>
-                    <div class="info-value">${data.duration ? data.duration + ' min' : '—'}</div>
+                <div class="info-label">Duração estimada</div>
+                <div class="info-value">${data.duration ? data.duration + ' min' : '—'}</div>
                 </div>
-            </div>
-            <div class="info-item">
+                </div>
+                <div class="info-item">
                 <i class="fa-solid fa-rotate" style="color:#64748b;"></i>
                 <div>
-                    <div class="info-label">Frequência</div>
-                    <div class="info-value">${data.frequency || '—'}</div>
+                <div class="info-label">Frequência</div>
+                <div class="info-value">${data.frequency || '—'}</div>
                 </div>
-            </div>
-            <div class="info-item">
+                </div>
+                <div class="info-item">
                 <i class="fa-solid fa-wheelchair" style="color:#64748b;"></i>
                 <div>
-                    <div class="info-label">Acessibilidade</div>
-                    <div class="info-value">${data.accessible ? 'Acessível' : 'Não acessível'}</div>
+                <div class="info-label">Acessibilidade</div>
+                <div class="info-value">${data.accessible ? 'Acessível' : 'Não acessível'}</div>
                 </div>
-            </div>
-            <div class="info-item">
+                </div>
+                <div class="info-item">
                 <i class="fa-solid fa-snowflake" style="color:#64748b;"></i>
                 <div>
-                    <div class="info-label">Ar condicionado</div>
-                    <div class="info-value">${data.airConditioning ? 'Sim' : 'Não'}</div>
+                <div class="info-label">Ar condicionado</div>
+                <div class="info-value">${data.airConditioning ? 'Sim' : 'Não'}</div>
                 </div>
-            </div>
-            <div class="info-item">
-            <i class="fa-solid fa-bus" style="color:#64748b;"></i>
-            <div class="terminal-info-container">
-            <div class="terminal-name">
+                </div>
+                <div class="info-item">
+                <i class="fa-solid fa-bus" style="color:#64748b;"></i>
+                <div class="terminal-info-container">
+                
+                <div class="terminal-name">
                 <div class="info-label">Terminal</div>
                 <div class="info-value">${data.terminal || '—'}</div>
-            </div>
-               <div class="terminal-info-icon" onclick="openTerminalInfo('${data.terminal}')">
-               <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="terminal-info-icon" onclick="openTerminalInfo('${data.terminal}')">
+                <i class="fa-solid fa-circle-info"></i>
                 </div>
                 </div>
-            </div>
-            ${data.integration ?
+                </div>
+                ${data.integration ?
                 ` 
-            <div class="info-item">
-            <i class="fa-solid fa-ticket"></i>
-            <div class="integration-container">
-            <div class="info-label">
-            Possui integração com ${data.integration_place}
-            </div>
-            <div class="integration-more-info" onclick="showIntegrationInfo('${data.integration_place}')">
-            <i class="fa-solid fa-circle-question"></i>
-            </div>
-            </div>
-            
+                    <div class="info-item">
+                    <i class="fa-solid fa-ticket"></i>
+                    <div class="integration-container">
+                    <div class="info-label">
+                    Possui integração com ${data.integration_place}
+                    </div>
+                    <div class="integration-more-info" onclick="showIntegrationInfo('route')" style="cursor:pointer;">
+                    <i class="fa-solid fa-circle-question"></i>
+                    </div>
+                    </div>
+                    
             </div>
             </div>
                 `: ""
@@ -419,13 +423,13 @@ function openInfoSidebar(type, data) {
             </ul>
 
             <!-- Botão favoritar -->
-            <button class="sidebar-fav-btn ${isFav ? 'favorited' : ''}"
-                    id="sidebarFavBtn"
-                    onclick="toggleSidebarFavorite()">
-                <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
-                ${isFav ? 'Favoritado' : 'Favoritar rota'}
-            </button>
-            </div>
+                <button class="sidebar-fav-btn ${isFav ? 'favorited' : ''}"
+                        id="sidebarFavBtn"
+                        onclick="toggleSidebarFavorite()">
+                    <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
+                    ${isFav ? 'Favoritado' : 'Favoritar rota'}
+                </button>
+                </div>
 
         `;
     }
@@ -474,29 +478,31 @@ function openTerminalInfo(terminalName) {
             <p class="sidebar-section-title">Linhas disponíveis por aqui</p>
             <ul class="panel-stops-list bus-here-container">
             ${terminalData.bus_here ? terminalData.bus_here.map(bus => {
-        const busId = typeof bus === 'object' && bus !== null ? bus.id : bus;
-        const route = busRoutes.find(r => r.id.toString() === busId?.toString());
-        const routeName = route ? route.name : (busId || 'Linha sem identificação');
-        const routeColor = route ? route.color : '#94a3b8';
-        return `
+                const busId = typeof bus === 'object' && bus !== null ? bus.id : bus;
+                const route = busRoutes.find(r => r.id.toString() === busId?.toString());
+                const routeName = route ? route.name : (busId || 'Linha sem identificação');
+                const routeColor = route ? route.color : '#94a3b8';
+                return `
                     <li class="panel-stop-item bus-line-item">
                         <div class="panel-stop-badge bus-line-badge" style="background:${routeColor};">
                             <i class="fa-solid fa-bus-simple"></i>
                         </div>
                         <span>${routeName}</span>
                     </li>`
-    }).join('') : `<p class="terminal-empty-state">Nenhuma linha disponível para este terminal.</p>`}
+            }).join('') : `<p class="terminal-empty-state">Nenhuma linha disponível para este terminal.</p>`}
 
             </ul>
             <hr>
             <div class="info-item terminal-detail-item">
                 <i class="fa-solid fa-ticket"></i>
                 <div>
-                    <div class="info-label">Integração</div>
+                    <div class="info-label" onclick="showIntegrationInfo('terminal')" style="cursor:pointer;">
+                        Integração
+                    </div>
                     ${terminalData.integration ? `
                     <div class="info-value ${terminalData.integration ? 'terminal-integration-positive' : 'terminal-integration-negative'}">Integração com a estação ${terminalData.integration_place}</div>` : `
                     ""`
-                    }
+        }
                     </div>
                 </div>
             </div>
@@ -517,6 +523,42 @@ function closeTerminalInfo() {
     terminalInfoBox.style.display = 'none';
     sideBarHeader.style.display = 'block';
     sideBarBody.style.display = 'block';
+}
+
+function showIntegrationInfo(typeOrPlace = 'route') {
+    const existing = document.querySelector('.integration-info-popup');
+    if (existing) existing.remove();
+
+    let text;
+    if (typeOrPlace === 'terminal') {
+        text = 'Significa que ao utilizar qualquer linha neste terminal pagando pelo cartão VEM, não será necessário pagar outra passagem para utilizar o metrô e vice-versa no período de 2 horas.';
+    } else if (typeOrPlace === 'route') {
+        text = 'Significa que ao utilizar esta linha pagando pelo cartão VEM, não será necessário pagar outra passagem para utilizar o metrô e vice-versa no período de 2 horas.';
+    } else {
+        text = `Significa que ao utilizar essa linha pagando pelo cartão VEM, não será necessário pagar uma nova passagem para utilizar o metrô na ${typeOrPlace} no período de 2 horas.`;
+    }
+
+    const integrationElement = document.createElement('div');
+    integrationElement.className = 'integration-info-popup';
+    integrationElement.innerHTML = `
+        <div class="integration-info-content">
+            <p class="integration-info-text">${text}</p>
+            <button class="integration-info-close" onclick="closeIntegrationInfo()">Ok</button>
+        </div>
+    `;
+
+    integrationElement.addEventListener('click', (event) => {
+        if (event.target === integrationElement) {
+            closeIntegrationInfo();
+        }
+    });
+
+    document.body.appendChild(integrationElement);
+}
+
+function closeIntegrationInfo() {
+    const integrationPopup = document.querySelector('.integration-info-popup');
+    if (integrationPopup) integrationPopup.remove();
 }
 
 function toggleSidebarFavorite() {
@@ -1049,33 +1091,6 @@ function enableHorizontalDrag(container) {
     container.addEventListener('mouseup', stopDragging);
     container.dataset.dragReady = 'true';
 }
-//mostrar informações da integração
-function showIntegrationInfo(integrationPlace) {
-    const detailedInfo = document.getElementById('detailedInfo');
-    if (!detailedInfo) return;
-    detailedInfo.innerHTML += `
-    <div class="integration-info-container">
-    <div class="integration-info">
-    <div class="integration-header">
-    <p>Significa que ao utilizar essa linha pagando pelo cartão VEM, não será necessário pagar uma nova passagem para utilizar o metrô na ${integrationPlace} no período de 2 horas.</p>
-    <a href="#">Saiba mais</a>
-    </div>
-    <button class="back-btn" onclick="hideIntegrationInfo()">Ok</button>
-    </div>
-    </div>
-    `
-}
-
-function hideIntegrationInfo() {
-    const detailedInfo = document.getElementById('detailedInfo');
-    if (!detailedInfo) return;
-
-    const integrationInfoDiv = detailedInfo.querySelector('.integration-info-container');
-    if (integrationInfoDiv) {
-        integrationInfoDiv.remove();
-    }
-}
-
 //mostrar informações do terminal
 async function showTerminalInfo(terminalName) {
     const detailedInfo = document.getElementById('detailedInfo');
