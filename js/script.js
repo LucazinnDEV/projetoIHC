@@ -36,7 +36,7 @@ const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
 const STORAGE_KEY_HISTORY = 'recifeHub_history';
 const STORAGE_KEY_USER = 'recifeHub_user';
 const STORAGE_KEY_FAVORITES = 'recifeHub_favorites';
-const GROQ_PROXY_URL = 'https://SEU_BACKEND.onrender.com/api/groq';
+const GROQ_PROXY_URL = 'https://recifehub-backend.onrender.com/api/groq';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
