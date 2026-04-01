@@ -493,15 +493,14 @@ function openTerminalInfo(terminalName) {
 
             </ul>
             <hr>
+            ${terminalData.integration ? `
             <div class="info-item terminal-detail-item">
                 <i class="fa-solid fa-ticket"></i>
                 <div>
                     <div class="info-label" onclick="showIntegrationInfo('terminal')" style="cursor:pointer;">
                         Integração
                     </div>
-                    ${terminalData.integration ? `
-                    <div class="info-value ${terminalData.integration ? 'terminal-integration-positive' : 'terminal-integration-negative'}">Integração com a estação ${terminalData.integration_place}</div>` : `
-                    ""`
+                    <div class="info-value ${terminalData.integration ? 'terminal-integration-positive' : 'terminal-integration-negative'}">Integração com a estação ${terminalData.integration_place}</div>` : ``
         }
                     </div>
                 </div>
