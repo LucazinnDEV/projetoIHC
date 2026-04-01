@@ -232,4 +232,9 @@ body {
         min-width: 245px;
         height: 190px;
     }
+
+    .linhas-container {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    }
 }
