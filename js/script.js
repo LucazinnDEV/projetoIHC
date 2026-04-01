@@ -36,6 +36,7 @@ const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
 const STORAGE_KEY_HISTORY = 'recifeHub_history';
 const STORAGE_KEY_USER = 'recifeHub_user';
 const STORAGE_KEY_FAVORITES = 'recifeHub_favorites';
+const GROQ_PROXY_URL = 'https://SEU_BACKEND.onrender.com/api/groq';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
@@ -1344,25 +1345,12 @@ function hideTypingIndicator() {
 }
 
 async function fetchGroqCompletion(messages) {
-    // Uses the API Key from CONFIG in config.js
-    if (!CONFIG || !CONFIG.GROQ_API_KEY) {
-        throw new Error('GROQ_API_KEY não configurada no config.js');
-    }
-
-    const payload = {
-        model: "llama-3.1-8b-instant",
-        messages: messages,
-        temperature: 0.5,
-        max_tokens: 500
-    };
-
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const response = await fetch(GROQ_PROXY_URL, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${CONFIG.GROQ_API_KEY}`,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ messages })
     });
 
     if (!response.ok) {
