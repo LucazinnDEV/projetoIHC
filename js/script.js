@@ -505,14 +505,14 @@ function openTerminalInfo(terminalName) {
             ${terminalData.integration ? `
             <div class="info-item terminal-detail-item">
                 <i class="fa-solid fa-ticket"></i>
-                <div>
-                    <div class="info-label" onclick="showIntegrationInfo('terminal')" style="cursor:pointer;">
-                        Integração
-                    </div>
-                    <div class="info-value ${terminalData.integration ? 'terminal-integration-positive' : 'terminal-integration-negative'}">Integração com a estação ${terminalData.integration_place}</div>` : ``
-        }
+                <div class="integration-name">
+                    <div class="info-value ${terminalData.integration ? 'terminal-integration-positive' : 'terminal-integration-negative'}" style="color:var(--secondary);">Integração com a ${terminalData.integration_place}</div>
+                        <div class="info-label" onclick="showIntegrationInfo('terminal')" style="cursor:pointer; color:var(--secondary);">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </div>
                     </div>
                 </div>
+            </div>` : ``}
             </div>
             <div class="info-item terminal-detail-item">
                 <i class="fa-solid fa-circle-info"></i>

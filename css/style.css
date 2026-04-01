@@ -549,6 +549,11 @@ body {
     color: #0f172a;
 }
 
+.terminal-detail-item .integration-name{
+    display: flex;
+    align-items: center;
+}
+
 #galery_container {
     display: flex;
     flex-direction: column;
