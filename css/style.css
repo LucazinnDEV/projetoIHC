@@ -479,7 +479,7 @@ body {
     font-weight: 900;
 }
 
-.terminal-info-container, .integration-container{
+.info-item .terminal-info-container, .integration-container{
     display: flex;
     align-items: center;
     width: 100%;
@@ -492,6 +492,124 @@ body {
 
 .integration-container .info-label, .integration-more-info i, .fa-ticket{
     color: var(--secondary);
+}
+
+.terminal-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 25px 30px;
+}
+
+.terminal-section-card {
+    border: 1px solid #f1f5f9;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.terminal-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.terminal-header .header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.terminal-main-info{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    
+}
+.terminal-main-info hr{
+    border: none;
+    border-top: 1px solid #f1f5f9;
+    padding: 5px 0;
+}
+.terminal-back-link {
+    width: fit-content;
+    text-decoration: none;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.terminal-back-link:hover {
+    color: #1e293b;
+}
+
+.terminal-title {
+    margin: 0;
+    color: #0f172a;
+}
+
+#galery_container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.galery {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.galery img {
+    width: 100%;
+    min-width: 240px;
+    max-width: 360px;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex: 0 0 auto;
+}
+
+.terminal-empty-state {
+    width: 100%;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    background: white;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 18px 12px;
+}
+
+.bus-here-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bus-line-item {
+    align-items: center;
+}
+
+.bus-line-badge {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+}
+
+.terminal-detail-item {
+    margin-bottom: 0;
+}
+
+.terminal-integration-positive {
+    color: #059669;
+}
+
+.terminal-integration-negative {
+    color: #dc2626;
 }
 
 /* Responsive */
@@ -510,6 +628,7 @@ body {
     .nav-center.active { display: block; }
     .mobile-menu-btn { display: flex; }
     .floating-controls { bottom: 20px; right: 20px; }
+    .terminal-info-box { padding: 18px 20px 24px; }
 }
 
 /* Botão de favoritar */

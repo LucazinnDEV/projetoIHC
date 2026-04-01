@@ -13,8 +13,23 @@ let routeStopMarkers = [];       // marcadores numerados das paradas da rota sel
 let userCoords = null;           // { lat, lng } do usuário
 let currentSelectedRoute = null; // rota atualmente selecionada
 
+async function get_terminal_data() {
+    const response = await fetch('assets/terminais.json');
+    if (!response.ok) throw new Error('Erro ao carregar terminais');
+    return await response.json();
+}
+
 // Terminais fixos usados para calcular paradas próximas (em terminais.json)
-const TERMINALS = fetch('assets/terminais.json').then(res => res.json());
+let TERMINALS = [];
+
+async function loadTerminalsData() {
+    try {
+        TERMINALS = await get_terminal_data();
+    } catch (error) {
+        console.error('Erro ao carregar terminais:', error);
+        TERMINALS = [];
+    }
+}
 
 // Constants
 const RECIFE_ANTIGO_COORDS = [-8.061, -34.873];
@@ -25,9 +40,10 @@ const STORAGE_KEY_FAVORITES = 'recifeHub_favorites';
 document.addEventListener('DOMContentLoaded', async () => {
     initMap();
     initUI();
+    await loadTerminalsData();
     await loadData();
     initGeolocation();
-    
+
     // Check auto-select
     const autoSelectId = sessionStorage.getItem('recifeHub_autoSelectRoute');
     if (autoSelectId) {
@@ -95,8 +111,8 @@ function haversineDistance(lat1, lng1, lat2, lng2) {
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) ** 2
-            + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
-            * Math.sin(dLng / 2) ** 2;
+        + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+        * Math.sin(dLng / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
@@ -241,12 +257,12 @@ function openRoutePanel(route) {
     const nearbyHTML = nearbyToRoute.length > 0
         ? `<p class="panel-section-title">Terminais próximos de você</p>
            ${nearbyToRoute.map(t => {
-               const d = haversineDistance(userCoords.lat, userCoords.lng, t.lat, t.lng).toFixed(1);
-               return `<div class="panel-nearby-item">
+            const d = haversineDistance(userCoords.lat, userCoords.lng, t.lat, t.lng).toFixed(1);
+            return `<div class="panel-nearby-item">
                    <i class="fa-solid fa-bus-simple"></i>
                    <span><strong>${t.name}</strong><br><small>~${d} km de você</small></span>
                </div>`;
-           }).join('')}`
+        }).join('')}`
         : '';
 
     content.innerHTML = `
@@ -263,12 +279,12 @@ function openRoutePanel(route) {
         <p class="panel-section-title">Paradas da rota</p>
         <ul class="panel-stops-list">
             ${(route.stops || []).map((stop, i, arr) => {
-                const badge = i === 0 ? 'A' : i === arr.length - 1 ? 'B' : i;
-                return `<li class="panel-stop-item">
+        const badge = i === 0 ? 'A' : i === arr.length - 1 ? 'B' : i;
+        return `<li class="panel-stop-item">
                     <div class="panel-stop-badge" style="background:${route.color}">${badge}</div>
                     <span>${stop}</span>
                 </li>`;
-            }).join('')}
+    }).join('')}
         </ul>
 
         ${nearbyHTML}
@@ -283,10 +299,10 @@ function closeRoutePanel() {
 
 // Sidebar de informações
 function openInfoSidebar(type, data) {
-    const sidebar  = document.getElementById('infoSidebar');
-    const iconEl   = sidebar.querySelector('.sidebar-icon');
-    const titleEl  = sidebar.querySelector('.sidebar-title');
-    const bodyEl   = sidebar.querySelector('.sidebar-body');
+    const sidebar = document.getElementById('infoSidebar');
+    const iconEl = sidebar.querySelector('.sidebar-icon');
+    const titleEl = sidebar.querySelector('.sidebar-title');
+    const bodyEl = sidebar.querySelector('.sidebar-body');
 
     if (type === 'route') {
         const isFav = isFavorite(data.id);
@@ -298,15 +314,15 @@ function openInfoSidebar(type, data) {
         const nearbyHTML = nearbyTerminals.length > 0
             ? `<p class="sidebar-section-title">Terminais próximos</p>
                ${nearbyTerminals.map(t => {
-                   const d = haversineDistance(userCoords.lat, userCoords.lng, t.lat, t.lng).toFixed(1);
-                   return `<div class="info-item">
+                const d = haversineDistance(userCoords.lat, userCoords.lng, t.lat, t.lng).toFixed(1);
+                return `<div class="info-item">
                        <i class="fa-solid fa-bus-simple" style="color:#10b981;"></i>
                        <div>
                            <div class="info-label">${t.name}</div>
                            <div class="info-value" style="font-size:14px;">~${d} km de você</div>
                        </div>
                    </div>`;
-               }).join('')}`
+            }).join('')}`
             : '';
 
         iconEl.style.background = data.color + '22';
@@ -360,31 +376,31 @@ function openInfoSidebar(type, data) {
                 </div>
             </div>
             <div class="info-item">
-                <i class="fa-solid fa-bus" style="color:#64748b;"></i>
-                <div class="terminal-info-container">
-                <div class="terminal-name">
-                    <div class="info-label">Terminal</div>
-                    <div class="info-value">${data.terminal || '—'}</div>
-                </div>
-               <div class="terminal-info-icon" onclick="openTerminalInfo(${data.terminal})">
+            <i class="fa-solid fa-bus" style="color:#64748b;"></i>
+            <div class="terminal-info-container">
+            <div class="terminal-name">
+                <div class="info-label">Terminal</div>
+                <div class="info-value">${data.terminal || '—'}</div>
+            </div>
+               <div class="terminal-info-icon" onclick="openTerminalInfo('${data.terminal}')">
                <i class="fa-solid fa-circle-info"></i>
                 </div>
                 </div>
             </div>
             ${data.integration ?
                 ` 
-                <div class="info-item">
-                <i class="fa-solid fa-ticket"></i>
-                <div class="integration-container">
-                <div class="info-label">
-                Possui integração com ${data.integration_place}
-                </div>
-                <div class="integration-more-info">
-                <i class="fa-solid fa-circle-question"></i>
-                </div>
-                </div>
-                
-                </div>
+            <div class="info-item">
+            <i class="fa-solid fa-ticket"></i>
+            <div class="integration-container">
+            <div class="info-label">
+            Possui integração com ${data.integration_place}
+            </div>
+            <div class="integration-more-info" onclick="showIntegrationInfo('${data.integration_place}')">
+            <i class="fa-solid fa-circle-question"></i>
+            </div>
+            </div>
+            
+            </div>
             </div>
                 `: ""
             }
@@ -394,12 +410,12 @@ function openInfoSidebar(type, data) {
             <p class="sidebar-section-title">Paradas da linha</p>
             <ul class="panel-stops-list">
                 ${(data.stops || []).map((stop, i, arr) => {
-                    const badge = i === 0 ? 'A' : i === arr.length - 1 ? 'B' : i;
-                    return `<li class="panel-stop-item">
+                const badge = i === 0 ? 'A' : i === arr.length - 1 ? 'B' : i;
+                return `<li class="panel-stop-item">
                         <div class="panel-stop-badge" style="background:${data.color}">${badge}</div>
                         <span>${stop}</span>
                     </li>`;
-                }).join('')}
+            }).join('')}
             </ul>
 
             <!-- Botão favoritar -->
@@ -409,8 +425,6 @@ function openInfoSidebar(type, data) {
                 <i class="fa-${isFav ? 'solid' : 'regular'} fa-star"></i>
                 ${isFav ? 'Favoritado' : 'Favoritar rota'}
             </button>
-
-            <div id="terminalInfoBox" class="terminal-info-box" style="display:none;">
             </div>
 
         `;
@@ -424,59 +438,85 @@ function closeInfoSidebar() {
 }
 
 function openTerminalInfo(terminalName) {
-    const terminalInfoBox = document.getElementById('terminalInfoBox');
+    const terminalInfoBox = document.querySelector('.terminal-info-box');
     const sideBarHeader = document.querySelector('.sidebar-header');
     const sideBarBody = document.querySelector('.sidebar-body');
-    const terminalData = TERMINALS.find(t => t.name === terminalName);
+
+    let terminalData = TERMINALS.find(t => t.name === terminalName);
+    let routes = busRoutes.filter(r => r.terminal === terminalName);
+    console.log(terminalData, routes);
 
     if (!terminalData) return;
 
     sideBarHeader.style.display = 'none';
     sideBarBody.style.display = 'none';
     terminalInfoBox.style.display = 'block';
+
     terminalInfoBox.innerHTML = `
-    <section class="terminal-header">
+    <section class="terminal-header terminal-section-card">
             <div class="header-title">
-                <a href="#" onclick="document.getElementById('terminalInfoBox').style.display='none'; return false;" class="back-link">
+                <a href="#" onclick="closeTerminalInfo()" class="back-link terminal-back-link">
                     <i class="fa-solid fa-angle-left"></i>
                     <p>Voltar</p>
                 </a>
-                <h2>${terminalData.name}</h2>
+                <h2 class="panel-route-name terminal-title">${terminalData.name}</h2>
             </div>
             <section id="galery_container">
                 <div class="galery">
-                    <p style="color:#94a3b8;">Nenhuma imagem disponível para
-                        este terminal.</p>
+                    ${terminalData.images && terminalData.images.length > 0
+            ? terminalData.images.map(img => `<img src="${img}" alt="Imagem do terminal ${terminalData.name}">`).join('')
+            : `<p class="terminal-empty-state">Nenhuma imagem disponível para este terminal.</p>`}
                 </div>
             </section>
         </section>
 
-        <section class="terminal-main-info">
-            <p class="main-info-title">Linhas disponíveis por aqui:</p>
-            <div class="bus-here-container">
-                    <div class="bus_name">
-                        <div id="color"></div>
-                        <div class="bus_container_favorites">
-                            <p>${route.name}</p>
-                            <i class="fa-regular fa-star"></i>
+        <section class="terminal-main-info terminal-section-card">
+            <p class="sidebar-section-title">Linhas disponíveis por aqui</p>
+            <ul class="panel-stops-list bus-here-container">
+            ${terminalData.bus_here ? terminalData.bus_here.map(bus => {
+        const busId = typeof bus === 'object' && bus !== null ? bus.id : bus;
+        const route = busRoutes.find(r => r.id.toString() === busId?.toString());
+        const routeName = route ? route.name : (busId || 'Linha sem identificação');
+        const routeColor = route ? route.color : '#94a3b8';
+        return `
+                    <li class="panel-stop-item bus-line-item">
+                        <div class="panel-stop-badge bus-line-badge" style="background:${routeColor};">
+                            <i class="fa-solid fa-bus-simple"></i>
                         </div>
+                        <span>${routeName}</span>
+                    </li>`
+    }).join('') : `<p class="terminal-empty-state">Nenhuma linha disponível para este terminal.</p>`}
+
+            </ul>
+            <hr>
+            <div class="info-item terminal-detail-item">
+                <i class="fa-solid fa-ticket"></i>
+                <div>
+                    <div class="info-label">Integração</div>
+                    ${terminalData.integration ? `
+                    <div class="info-value ${terminalData.integration ? 'terminal-integration-positive' : 'terminal-integration-negative'}">Integração com a estação ${terminalData.integration_place}</div>` : `
+                    ""`
+                    }
                     </div>
-                    <div class="bus_name">
-                        <div id="color"></div>
-                        <div class="bus_container_favorites">
-                            <p>${route.name}</p>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
                 </div>
             </div>
-            <div class="integration"></div>
-            <div class="other-info">
-                <p class="other-info-title">Outras informações</p>
-                <p style="color:#94a3b8;">Nenhuma informação adicional disponível para
-                    este terminal.</p>
+            <div class="info-item terminal-detail-item">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                    <div class="info-label">Outras informações</div>
+                    <div class="info-value">${terminalData.other_info || 'Nenhuma informação adicional disponível para este terminal.'}</div>
+                </div>
             </div>
         </section>
     `
+}
+function closeTerminalInfo() {
+    const terminalInfoBox = document.querySelector('.terminal-info-box');
+    const sideBarHeader = document.querySelector('.sidebar-header');
+    const sideBarBody = document.querySelector('.sidebar-body');
+    terminalInfoBox.style.display = 'none';
+    sideBarHeader.style.display = 'block';
+    sideBarBody.style.display = 'block';
 }
 
 function toggleSidebarFavorite() {
@@ -531,10 +571,10 @@ async function loadData() {
 }
 
 function deriveReturnColor(hex) {
-    const r = parseInt(hex.slice(1,3), 16) / 255;
-    const g = parseInt(hex.slice(3,5), 16) / 255;
-    const b = parseInt(hex.slice(5,7), 16) / 255;
-    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
     let h, s, l = (max + min) / 2;
     if (max === min) { h = s = 0; }
     else {
@@ -547,22 +587,22 @@ function deriveReturnColor(hex) {
     h = (h + 0.5) % 1;
     function hue2rgb(p, q, t) {
         if (t < 0) t += 1; if (t > 1) t -= 1;
-        if (t < 1/6) return p + (q - p) * 6 * t;
-        if (t < 1/2) return q;
-        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
         return p;
     }
     const q2 = l < 0.5 ? l * (1 + s) : l + s - l * s;
     const p2 = 2 * l - q2;
     const toHex = v => Math.round(v * 255).toString(16).padStart(2, '0');
-    return `#${toHex(hue2rgb(p2,q2,h+1/3))}${toHex(hue2rgb(p2,q2,h))}${toHex(hue2rgb(p2,q2,h-1/3))}`;
+    return `#${toHex(hue2rgb(p2, q2, h + 1 / 3))}${toHex(hue2rgb(p2, q2, h))}${toHex(hue2rgb(p2, q2, h - 1 / 3))}`;
 }
 
 // Rotas
 function drawAllRoutes() {
     busRoutes.forEach(route => {
         const mid = Math.floor(route.path.length / 2);
-        const pathGo     = route.path.slice(0, mid + 1);
+        const pathGo = route.path.slice(0, mid + 1);
         const pathReturn = route.path.slice(mid);
         const returnColor = deriveReturnColor(route.color);
 
@@ -760,7 +800,7 @@ function initUI() {
         toggleAiBtn.addEventListener('click', () => {
             chatAssistant.classList.add('active');
             chatInput.focus();
-            
+
             // Personalize greeting if name is set
             const userData = localStorage.getItem(STORAGE_KEY_USER);
             if (userData) {
@@ -1169,7 +1209,7 @@ async function handleUserChatMessage() {
 
     // Append user message to UI
     appendMessage(text, 'user-message');
-    
+
     // Add to history
     chatHistory.push({ role: "user", content: text });
 
@@ -1178,13 +1218,13 @@ async function handleUserChatMessage() {
 
     try {
         const responseText = await fetchGroqCompletion(chatHistory);
-        
+
         // Remove typing indicator before showing result
         hideTypingIndicator();
 
         // Append AI message
         appendMessage(responseText, 'ai-message');
-        
+
         // Add to history
         chatHistory.push({ role: "assistant", content: responseText });
 
@@ -1200,7 +1240,7 @@ async function handleUserChatMessage() {
 
 function detectAndHighlightRoutes(text) {
     // Look for route names in the text
-    const foundRoutes = busRoutes.filter(route => 
+    const foundRoutes = busRoutes.filter(route =>
         text.toLowerCase().includes(route.name.toLowerCase())
     );
 
@@ -1209,7 +1249,7 @@ function detectAndHighlightRoutes(text) {
         // For now, let's add a "Ver no Mapa" button to the last message if routes found
         const chatMessages = document.getElementById('chatMessages');
         const lastMsg = chatMessages.lastElementChild;
-        
+
         if (lastMsg && lastMsg.classList.contains('ai-message')) {
             const btnContainer = document.createElement('div');
             btnContainer.style.marginTop = '10px';
@@ -1237,12 +1277,12 @@ function detectAndHighlightRoutes(text) {
 
 function appendMessage(text, className) {
     const chatMessages = document.getElementById('chatMessages');
-    
+
     const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${className}`;
-    
+
     // Replace newlines with <br> for HTML rendering
     const formattedText = text.replace(/\\n/g, '<br>');
 
@@ -1252,7 +1292,7 @@ function appendMessage(text, className) {
     `;
 
     chatMessages.appendChild(msgDiv);
-    
+
     // Scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }

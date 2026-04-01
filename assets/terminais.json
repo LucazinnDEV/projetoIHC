@@ -9,7 +9,7 @@
         "bus_here": [
             { "id": "117" }
         ],
-        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
         "images": [
             "assets/imgs/terminals/ti-recife-frente.png"
         ]
@@ -25,7 +25,7 @@
             { "id": "021" },
             { "id": "026" }
         ],
-        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
         "images": [
             "assets/imgs/terminals/ti-joana-bezerra-frente.png"
         ]
@@ -40,7 +40,7 @@
         "bus_here": [
             { "id": "026" }
         ],
-        "other-info": "Possui banheiros, lanchonetes próximas, wifi gratuito e acesso ao Aeroporto Internacional dos Guararapes.",
+        "other_info": "Possui banheiros, lanchonetes próximas, wifi gratuito e acesso ao Aeroporto Internacional dos Guararapes.",
         "images": [
             "assets/imgs/terminals/ti-aeroporto-frente.png"
         ]
@@ -56,7 +56,7 @@
             { "id": "200" },
             { "id": "195" }
         ],
-        "other-info": "Não possui banheiros, mas possui lanchonetes próximas, acesso ao comércio local e ao Recife Antigo.",
+        "other_info": "Não possui banheiros, mas possui lanchonetes próximas, acesso ao comércio local e ao Recife Antigo.",
         "images": [
             "assets/imgs/terminals/cais-de-santa-rita-frente.png"
         ]
@@ -71,7 +71,7 @@
         "bus_here": [
             { "id": "200" }
         ],
-        "other-info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
         "images": [
             "assets/imgs/terminals/ti-jaboatao-frente.png"
         ]
@@ -86,7 +86,7 @@
         "bus_here": [
             { "id": "414" }
         ],
-        "other-info": "Não possui banheiros, mas possui acesso à comunidade local.",
+        "other_info": "Não possui banheiros, mas possui acesso à comunidade local.",
         "images": [
             "assets/imgs/terminals/terminal-de-torre-frente.png"
         ]
