@@ -890,9 +890,9 @@
     "integration": true,
     "integration_place": "Estação Joana Bezerra e Estação Aeroporto",
     "images": [
-      "assets/imgs/bus/117/117-circular.png",
-      "assets/imgs/bus/117/117-frente.jpg",
-      "assets/imgs/bus/117/117-costas.jpg"
+      "assets/imgs/bus/026/026-branco-frente.jpg",
+      "assets/imgs/bus/026/026-vermelho-frente.jpg",
+      "assets/imgs/bus/026/026-branco-variacao-frente.jpg"
     ]
   },
   {
@@ -1369,9 +1369,9 @@
     "integration": true,
     "integration_place": "Estação Recife",
     "images": [
-      "assets/imgs/bus/117/117-circular.png",
       "assets/imgs/bus/117/117-frente.jpg",
-      "assets/imgs/bus/117/117-costas.jpg"
+      "assets/imgs/bus/117/117-costas.jpg",
+      "assets/imgs/bus/117/117-circular.png"
     ]
   },
   {
@@ -2268,9 +2268,9 @@
     "integration": true,
     "integration_place": "Estação Jaboatão",
     "images": [
-      "assets/imgs/bus/117/117-circular.png",
-      "assets/imgs/bus/117/117-frente.jpg",
-      "assets/imgs/bus/117/117-costas.jpg"]
+      "assets/imgs/bus/200/200-jaboatao-frente.jpg",
+      "assets/imgs/bus/200/200-parador-frente.jpg"
+    ]
   },
   {
     "id": "195",
@@ -4069,9 +4069,9 @@
     "integration": false,
     "integration_place": "-",
     "images": [
-      "assets/imgs/bus/117/117-circular.png",
-      "assets/imgs/bus/117/117-frente.jpg",
-      "assets/imgs/bus/117/117-costas.jpg"]
+      "assets/imgs/bus/195/195-porto-azul-frente.png",
+      "assets/imgs/bus/195/195-porto-amarelo-frente.png"
+    ]
   },
   {
     "id": "021",
@@ -4472,9 +4472,8 @@
     "integration": true,
     "integration_place": "Estação Joana Bezerra",
     "images": [
-      "assets/imgs/bus/117/117-circular.png",
-      "assets/imgs/bus/117/117-frente.jpg",
-      "assets/imgs/bus/117/117-costas.jpg"]
+      "assets/imgs/bus/021/021-frente.jpg"
+    ]
   },
   {
     "id": "414",
@@ -5044,8 +5043,6 @@
     "integration": false,
     "integration_place": "-",
     "images": [
-      "assets/imgs/bus/117/117-circular.png",
-      "assets/imgs/bus/117/117-frente.jpg",
-      "assets/imgs/bus/117/117-costas.jpg"]
+      "assets/imgs/bus/414/414-frente.png"]
   }
 ]
