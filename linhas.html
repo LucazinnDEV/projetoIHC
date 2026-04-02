@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linhas - Recife Hub</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/linhas.css">
 </head>
+
 <body>
 
     <header class="pg-header">
@@ -26,14 +28,16 @@
     <main class="linhas-container" id="linhasContainer">
         <!-- Loader inicial -->
         <div style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 60px; color: #64748b;">
-            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2.5rem; margin-bottom: 20px; color: var(--primary);"></i>
+            <i class="fa-solid fa-circle-notch fa-spin"
+                style="font-size: 2.5rem; margin-bottom: 20px; color: var(--primary);"></i>
             <p style="font-size: 1.1rem; font-weight: 500;">Carregando as linhas do Recife...</p>
         </div>
     </main>
 
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home" onclick="window.location.href='index.html'">
+        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home"
+            onclick="window.location.href='index.html'">
             <i class="fa-solid fa-house"></i>
         </button>
         <button class="bottom-nav-btn linhas-nav-btn" id="navLinhas" title="Linhas">
@@ -42,5 +46,18 @@
     </div>
 
     <script src="js/linhas.js"></script>
+
+    <!-- widget libras -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 </body>
+
 </html>

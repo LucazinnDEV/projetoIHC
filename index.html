@@ -104,7 +104,8 @@
         <!-- Chat Messages Area -->
         <div class="chat-messages" id="chatMessages">
             <div class="message ai-message">
-                <p>Olá! Sou o Recife Hub AI 🤖<br>Posso te ajudar a encontrar as melhores rotas de ônibus pelo Recife. Pra onde você quer ir?</p>
+                <p>Olá! Sou o Recife Hub AI 🤖<br>Posso te ajudar a encontrar as melhores rotas de ônibus pelo Recife.
+                    Pra onde você quer ir?</p>
                 <span class="message-time">Agora</span>
             </div>
         </div>
@@ -192,10 +193,12 @@
 
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home" onclick="window.location.href='index.html'">
+        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home"
+            onclick="window.location.href='index.html'">
             <i class="fa-solid fa-house"></i>
         </button>
-        <button class="bottom-nav-btn linhas-nav-btn" id="navLinhas" title="Linhas" onclick="window.location.href='linhas.html'">
+        <button class="bottom-nav-btn linhas-nav-btn" id="navLinhas" title="Linhas"
+            onclick="window.location.href='linhas.html'">
             <i class="fa-solid fa-route"></i>
         </button>
     </div>
@@ -205,6 +208,18 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- App JS -->
     <script src="js/script.js"></script>
+
+    <!-- widget libras -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
 </body>
 
 </html>
