@@ -1,4 +1,4 @@
-# Recife Hub - Ônibus no Recife Antigo
+# Recife Hub 
 
 <div align="center">
 
@@ -6,66 +6,69 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
 
 **Um aplicativo web para consulta de rotas e informações sobre ônibus na Região Metropolitana do Recife**
 
-[Figma](https://www.figma.com/design/WdL33TlumsLD0NHB8VE1ny?node-id=0-1) • [Documentação](#) • [Demo](https://recifehub.onrender.com/)
+[Figma](https://www.figma.com/design/WdL33TlumsLD0NHB8VE1ny?node-id=0-1) • [Demo](https://recifehub.onrender.com/) • [Documentação](https://docs.google.com/document/d/1Vet2f3un0zViOiNetQozAyKT3chbyx8BXqMXaEzAjyY/edit?usp=sharing)
 
 </div>
 
 ## O Problema
 
-Aplicativos de rotas de ônibus possuem uma interface pouco intuitiva e lenta para os usuários, possuindo muitos anúncios que atrapalham o conteúdo, telas com um tempo de carregamento demorado e poucas informações sobre linhas e rotas dos ônibus.
+Os aplicativos de rotas de ônibus disponíveis atualmente apresentam interfaces com baixa usabilidade, excesso de anúncios que competem com o conteúdo principal, tempo de carregamento elevado e informações insuficientes sobre linhas e trajetos. O impacto é mais expressivo para usuários iniciantes, pessoas que utilizam o transporte coletivo ocasionalmente e precisam de informações claras sobre trajetos e destinos sem familiaridade prévia com a ferramenta.
 
-Isso não afeta apenas as pessoas que dependem do transporte público regularmente, mas afeta principalmente as pessoas iniciantes, que usam pouco e apenas querem ir para um local diferente e querem saber mais sobre essa rota.
+## Público-Alvo
 
-### Público-Alvo
-
-**Pessoas de todas as idades e principalmente pessoas iniciantes.**
+Pessoas de diferentes faixas etárias que utilizam ou desejam utilizar o transporte público na região metropolitana do Recife, com ênfase em usuários iniciantes que se deslocam de ônibus de forma ocasional e precisam de informações claras para concluir seu deslocamento com segurança.
 
 ## Protótipo
 
-🔗 **[Link para o Figma](https://www.figma.com/design/WdL33TlumsLD0NHB8VE1ny?node-id=0-1)**
+[Figma](https://www.figma.com/design/WdL33TlumsLD0NHB8VE1ny?node-id=0-1) • [Aplicação](https://recifehub.onrender.com/) • [Repositório](https://github.com/LucazinnDEV/projetoIHC)
+
+## Funcionalidades
+
+- Mapa interativo com visualização das rotas de ônibus
+- Busca de linhas com histórico das últimas consultas
+- Informações detalhadas de cada linha: tarifa, frequência, acessibilidade, ar-condicionado e integração com o metrô
+- Informações dos terminais: galeria de imagens, linhas disponíveis e estrutura local
+- Sistema de favoritos persistido via localStorage
+- Assistente de IA para dúvidas em linguagem natural
+- Página de listagem de linhas com galeria de imagens dos ônibus
+- Suporte a Libras via widget VLibras
+- Estados de sistema: carregamento, erro com retry, selecionado, vazio e sucesso
 
 ## Justificativa das Escolhas de Design
 
-Colocar as telas, mostrar os elementos e dizer o porquê daquele elemento ser assim com base nos conteúdos da aula (affordances, interação, etc).
+As decisões de design foram fundamentadas nos seguintes conceitos de IHC:
 
+- **Heurísticas de Nielsen**: visibilidade do estado do sistema, prevenção de erros, controle e liberdade do usuário e recuperação de erros guiaram as decisões de feedback, navegação e tratamento de falhas
+- **Affordances (Norman)**: ícones de lupa, estrela e robô comunicam sua função sem necessidade de instrução explícita
+- **Modelo Mental (Norman)**: o mapa interativo e a estrutura de cards seguem padrões já familiares ao usuário
+- **Princípios da Gestalt**: proximidade, similaridade, figura e fundo e continuidade foram aplicados na organização visual dos elementos
+- **Eficácia e Eficiência**: favoritos e histórico de buscas reduzem o número de passos para concluir uma tarefa
 
 ## Teste de Usabilidade
 
-Dizer como foi feito o teste do app.
+O teste foi realizado com três participantes, incluindo o monitor da disciplina de IHC. Os participantes executaram a tarefa de encontrar uma linha de ônibus e consultar suas informações no mapa. Foram coletados tempo de execução, número de erros, conclusão da tarefa e grau de satisfação.
 
-### Resultados do Teste
+### Melhorias Implementadas Após o Teste
 
-O que foi concluído com esse teste.
-
-### Alterações Feitas Após o Teste
-
-O que foi modificado depois de ter feito o teste.
-
+- Adição de borda de separação entre o painel do assistente de IA e o mapa, aumentando a distinção visual entre os elementos
+- Integração do widget VLibras para leitura do conteúdo em Língua Brasileira de Sinais
 
 ## Observações Finais
 
-Falar sobre alguma observação. Ex: Uso de IA.
-
+O assistente de IA utiliza a API da Groq com o modelo llama-3.1-8b-instant, acessada através de um backend próprio em Express.js hospedado no Render, que atua como proxy para proteger a chave de API. Os dados de rotas e terminais são armazenados localmente em arquivos JSON.
 
 ## Referências
 
-### APIs e Serviços
-
-#### Overpass API (OpenStreetMap)
-- [Documentação Oficial](https://wiki.openstreetmap.org/wiki/Overpass_API)
-
-#### GeoJSON
-- [Especificação GeoJSON](https://geojson.org/)
-
-#### Groq AI
-- [Documentação Oficial](https://console.groq.com/docs/overview)
-
-### Consulta das Linhas dos Ônibus
-
+- NIELSEN, Jakob. Usability Engineering. San Francisco: Morgan Kaufmann, 1993.
+- NIELSEN, Jakob. 10 Usability Heuristics for User Interface Design. Nielsen Norman Group, 1994.
+- NORMAN, Donald A. The Design of Everyday Things. New York: Basic Books, 1988.
+- ISO 9241-11: Ergonomics of human-system interaction. Genebra: ISO, 2018.
+- [Overpass API (OpenStreetMap)](https://wiki.openstreetmap.org/wiki/Overpass_API)
+- [GeoJSON](https://geojson.org/)
+- [Groq API](https://console.groq.com/docs/overview)
 - [Rumo Grande Recife](https://virtual.granderecife.pe.gov.br/rumo/)
 
 ## Equipe
@@ -82,8 +85,9 @@ Falar sobre alguma observação. Ex: Uso de IA.
     <td align="center"><a href="https://github.com/rebecaferraz"><b>Rebeca Ferraz</b></a></td>
   </tr>
 </table>
+
 <div align="center">
 
-**Desenvolvido para melhorar o transporte público do Recife**
+Desenvolvido para a disciplina de Interfaces Humano-Computador — CESAR School
 
 </div>
