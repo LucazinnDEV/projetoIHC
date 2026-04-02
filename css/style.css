@@ -1706,6 +1706,12 @@ body {
     pointer-events: none;
 }
 
+@media (min-width: 769px) {
+    body.chat-open .nearby-places-container {
+        left: 350px;
+    }
+}
+
 /* Category Bar */
 .nearby-category-bar {
     display: flex;

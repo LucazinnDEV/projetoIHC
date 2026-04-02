@@ -850,6 +850,7 @@ function initUI() {
     if (toggleAiBtn) {
         toggleAiBtn.addEventListener('click', () => {
             chatAssistant.classList.add('active');
+            document.body.classList.add('chat-open');
             chatInput.focus();
 
             // Personalize greeting if name is set
@@ -871,6 +872,7 @@ function initUI() {
     if (closeChatBtn) {
         closeChatBtn.addEventListener('click', () => {
             chatAssistant.classList.remove('active');
+            document.body.classList.remove('chat-open');
         });
     }
 
@@ -1290,6 +1292,7 @@ function detectAndHighlightRoutes(text) {
                     selectRoute(route);
                     if (window.innerWidth < 768) {
                         document.getElementById('chatAssistant').classList.remove('active');
+                        document.body.classList.remove('chat-open');
                     }
                 };
                 btnContainer.appendChild(btn);
