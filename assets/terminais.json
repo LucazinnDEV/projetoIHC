@@ -2,8 +2,8 @@
     {
         "id": 1,
         "name": "T.I. Recife",
-        "lat": -8.063889,
-        "lng": -34.871111,
+        "lat": -8.068527,
+        "lng": -34.884488,
         "integration": true,
         "integration_place": "Estação Recife",
         "bus_here": [
