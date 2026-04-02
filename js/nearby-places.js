@@ -43,28 +43,28 @@ function getUserLocation() {
 
 // --- 2. Buscar Lugares via Overpass API (OpenStreetMap) ---
 async function fetchNearbyPlaces(category) {
-    if (!userLocation) {
-        await getUserLocation();
-    }
-
-    // Check cache
-    if (nearbyPlacesData[category.id] && nearbyPlacesData[category.id].length > 0) {
-        return nearbyPlacesData[category.id];
-    }
-
-    const radius = 3000; // 3km
-    const [key, value] = category.tag.split('=');
-
-    const query = `
-        [out:json][timeout:10];
-        (
-            node["${key}"="${value}"](around:${radius},${userLocation.lat},${userLocation.lng});
-            way["${key}"="${value}"](around:${radius},${userLocation.lat},${userLocation.lng});
-        );
-        out center 20;
-    `;
-
     try {
+        if (!userLocation) {
+            await getUserLocation();
+        }
+
+        // Check cache
+        if (nearbyPlacesData[category.id] && nearbyPlacesData[category.id].length > 0) {
+            return nearbyPlacesData[category.id];
+        }
+
+        const radius = 3000; // 3km
+        const [key, value] = category.tag.split('=');
+
+        const query = `
+            [out:json][timeout:10];
+            (
+                node["${key}"="${value}"](around:${radius},${userLocation.lat},${userLocation.lng});
+                way["${key}"="${value}"](around:${radius},${userLocation.lat},${userLocation.lng});
+            );
+            out center 20;
+        `;
+
         const response = await fetch('https://overpass-api.de/api/interpreter', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -74,8 +74,9 @@ async function fetchNearbyPlaces(category) {
         if (!response.ok) throw new Error('Erro na API Overpass');
 
         const data = await response.json();
+        const elements = Array.isArray(data.elements) ? data.elements : [];
 
-        const places = data.elements
+        const places = elements
             .filter(el => el.tags && el.tags.name)
             .map(el => {
                 const lat = el.lat || (el.center && el.center.lat);
@@ -268,6 +269,13 @@ function renderPlaces(places, category) {
         card.addEventListener('click', () => {
             const p = places[idx];
             if (p.lat && p.lng && typeof map !== 'undefined') {
+                // Esconde apenas o painel/lista e mantém as categorias visíveis.
+                panel.classList.remove('open');
+                panel.innerHTML = '';
+                const allBtns = document.querySelectorAll('.nearby-category-btn');
+                allBtns.forEach(b => b.classList.remove('active'));
+                activeCategory = null;
+
                 map.setView([p.lat, p.lng], 17);
                 L.popup()
                     .setLatLng([p.lat, p.lng])
