@@ -13,6 +13,8 @@ let routeStopMarkers = [];       // marcadores numerados das paradas da rota sel
 let userCoords = null;           // { lat, lng } do usuário
 let currentSelectedRoute = null; // rota atualmente selecionada
 
+let username = "Viajante";
+console.log(username);
 async function get_terminal_data() {
     const response = await fetch('assets/terminais.json');
     if (!response.ok) throw new Error('Erro ao carregar terminais');
@@ -812,6 +814,8 @@ function initUI() {
 
     saveProfileBtn.addEventListener('click', () => {
         const name = document.getElementById('userName').value;
+        username = name;
+        console.log(username);
         const infoInputs = document.querySelector('.info-inputs');
         const feedback = document.createElement('p');
         if(name){
@@ -1214,14 +1218,14 @@ let chatHistory = [];
 function getSystemPrompt() {
     const routeNames = busRoutes.map(r => r.name).join(', ');
     return `Você é o Recife Hub AI, um assistente virtual especialista no transporte público do Recife. 
-    O Grand Recife Consórcio é o responsável pelo transporte. 
+    O Grande Recife Consórcio é o responsável pelo transporte. 
     
     ROTAS DISPONÍVEIS NO APP: ${routeNames}.
     
     INSTRUÇÕES:
     1. Ajude os usuários a encontrarem a melhor forma de se locomover.
     2. Seja prestativo, claro e conciso (máximo 3 parágrafos).
-    3. Use um tom amigável (estilo WhatsApp).
+    3. Use um tom amigável (estilo WhatsApp) e chame pelo nome do usuário, que é ${username}.
     4. IMPORTANTE: Sempre que mencionar uma das "ROTAS DISPONÍVEIS", escreva o nome completo da rota exatamente como listado.
     5. Se não tiver certeza de algo, oriente o usuário a verificar o mapa ou usar a busca.`;
 }
