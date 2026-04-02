@@ -6,6 +6,7 @@
 let userLocation = null;
 let nearbyPlacesData = {};
 let activeCategory = null;
+const DEFAULT_LOCATION = { lat: -8.063, lng: -34.871 };
 
 // --- Categorias ---
 const PLACE_CATEGORIES = [
@@ -19,7 +20,9 @@ const PLACE_CATEGORIES = [
 function getUserLocation() {
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-            reject(new Error('Geolocalização não suportada pelo navegador.'));
+            console.warn('Geolocalização não suportada, usando localização padrão (Recife Antigo).');
+            userLocation = { ...DEFAULT_LOCATION };
+            resolve(userLocation);
             return;
         }
         navigator.geolocation.getCurrentPosition(
@@ -33,7 +36,7 @@ function getUserLocation() {
             (error) => {
                 // Fallback: Recife Antigo
                 console.warn('Geolocalização negada, usando localização padrão (Recife Antigo).');
-                userLocation = { lat: -8.063, lng: -34.871 };
+                userLocation = { ...DEFAULT_LOCATION };
                 resolve(userLocation);
             },
             { enableHighAccuracy: true, timeout: 8000 }
