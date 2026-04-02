@@ -1,0 +1,94 @@
+[
+    {
+        "id": 1,
+        "name": "T.I. Recife",
+        "lat": -8.063889,
+        "lng": -34.871111,
+        "integration": true,
+        "integration_place": "Estação Recife",
+        "bus_here": [
+            { "id": "117" }
+        ],
+        "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-recife-frente.png"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "T.I. Joana Bezerra",
+        "lat": -8.080956,
+        "lng": -34.897512,
+        "integration": true,
+        "integration_place": "Estação Joana Bezerra",
+        "bus_here": [
+            { "id": "021" },
+            { "id": "026" }
+        ],
+        "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-joana-bezerra-frente.png"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "T.I. Aeroporto",
+        "lat": -8.129722,
+        "lng": -34.923056,
+        "integration": true,
+        "integration_place": "Estação Aeroporto",
+        "bus_here": [
+            { "id": "026" }
+        ],
+        "other_info": "Possui banheiros, lanchonetes próximas, wifi gratuito e acesso ao Aeroporto Internacional dos Guararapes.",
+        "images": [
+            "assets/imgs/terminals/ti-aeroporto-frente.png"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Cais de Santa Rita",
+        "lat": -8.068089,
+        "lng": -34.875854,
+        "integration": false,
+        "integration_place": "-",
+        "bus_here": [
+            { "id": "200" },
+            { "id": "195" }
+        ],
+        "other_info": "Não possui banheiros, mas possui lanchonetes próximas, acesso ao comércio local e ao Recife Antigo.",
+        "images": [
+            "assets/imgs/terminals/cais-de-santa-rita-frente.png"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "T.I. Jaboatão",
+        "lat": -8.111478,
+        "lng": -35.014520,
+        "integration": true,
+        "integration_place": "Estação Jaboatão",
+        "bus_here": [
+            { "id": "200" }
+        ],
+        "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
+        "images": [
+            "assets/imgs/terminals/ti-jaboatao-frente.png"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Terminal de Torre",
+        "lat": -8.042000,
+        "lng": -34.927830,
+        "integration": false,
+        "integration_place": "-",
+        "bus_here": [
+            { "id": "414" }
+        ],
+        "other_info": "Não possui banheiros, mas possui acesso à comunidade local.",
+        "images": [
+            "assets/imgs/terminals/terminal-de-torre-frente.png"
+        ]
+    }
+]
