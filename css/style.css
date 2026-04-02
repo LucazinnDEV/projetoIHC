@@ -333,6 +333,19 @@ body {
 
 .modal-header h2 { font-size: 1.25rem; }
 
+.info-inputs p{
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.info-inputs .success-message{
+    color: var(--secondary);
+}
+
+.info-inputs .error-message{
+    color: #ef4444;
+}
+
 .close-btn {
     background: transparent;
     border: none;

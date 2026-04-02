@@ -812,9 +812,20 @@ function initUI() {
 
     saveProfileBtn.addEventListener('click', () => {
         const name = document.getElementById('userName').value;
-        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify({ name }));
-        alert('Perfil salvo!');
-        profileModal.classList.remove('active');
+        const infoInputs = document.querySelector('.info-inputs');
+        const feedback = document.createElement('p');
+        if(name){
+            localStorage.setItem(STORAGE_KEY_USER, JSON.stringify({ name }));
+            feedback.className = 'success-message';
+            feedback.textContent = 'Perfil salvo com sucesso!';
+            infoInputs.appendChild(feedback);
+
+            
+        } else {
+            feedback.className = 'error-message';
+            feedback.textContent = 'Por favor, insira um nome para salvar seu perfil.';
+            infoInputs.appendChild(feedback);
+        }
     });
 
     clearHistoryBtn.addEventListener('click', () => {
