@@ -66,6 +66,11 @@ body {
     font-size: 1.1rem;
     box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
 }
+.subtitle-brand-text{
+    font-size: 0.8rem;
+    color: gray;
+    font-weight: 500;    
+}
 
 /* Search Bar */
 .nav-center {
@@ -647,6 +652,7 @@ body {
     .mobile-menu-btn { display: flex; }
     .floating-controls { bottom: 20px; right: 20px; }
     .terminal-info-box { padding: 18px 20px 24px; }
+    .subtitle-brand-text{ font-size: 0.6rem;}
 }
 
 /* Botão de favoritar */
