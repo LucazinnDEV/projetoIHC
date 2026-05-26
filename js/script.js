@@ -850,17 +850,97 @@ function initUI() {
             }
         });
     });
-    // Mobile menu toggle
-    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-        document.querySelector('.nav-center').classList.toggle('active');
-    });
-
     // AI Chat Events
     const toggleAiBtn = document.getElementById('toggleAiBtn');
     const closeChatBtn = document.getElementById('closeChatBtn');
     const chatAssistant = document.getElementById('chatAssistant');
     const chatInput = document.getElementById('chatInput');
     const sendChatBtn = document.getElementById('sendChatBtn');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileActionsOverlay = document.getElementById('mobileActionsOverlay');
+    const mobileActionsSidebar = document.getElementById('mobileActionsSidebar');
+    const mobileActionsCloseBtn = document.getElementById('mobileActionsCloseBtn');
+    const mobileAiActionBtn = document.getElementById('mobileAiActionBtn');
+    const mobileFavActionBtn = document.getElementById('mobileFavActionBtn');
+    const mobileProfileActionBtn = document.getElementById('mobileProfileActionBtn');
+
+    const updateNavbarOffset = () => {
+        const navbar = document.querySelector('.glass-navbar');
+        const measuredHeight = navbar ? Math.round(navbar.getBoundingClientRect().height) : 70;
+        document.documentElement.style.setProperty('--app-nav-height', `${measuredHeight}px`);
+    };
+
+    updateNavbarOffset();
+    window.addEventListener('load', updateNavbarOffset);
+    window.addEventListener('orientationchange', updateNavbarOffset);
+
+    const closeMobileActions = () => {
+        if (!mobileActionsOverlay || !mobileActionsSidebar) return;
+        mobileActionsOverlay.classList.remove('active');
+        mobileActionsSidebar.classList.remove('active');
+        mobileActionsSidebar.setAttribute('aria-hidden', 'true');
+    };
+
+    const openMobileActions = () => {
+        if (!mobileActionsOverlay || !mobileActionsSidebar) return;
+        mobileActionsOverlay.classList.add('active');
+        mobileActionsSidebar.classList.add('active');
+        mobileActionsSidebar.setAttribute('aria-hidden', 'false');
+    };
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            if (!mobileActionsSidebar) return;
+            const isOpen = mobileActionsSidebar.classList.contains('active');
+            if (isOpen) {
+                closeMobileActions();
+            } else {
+                openMobileActions();
+            }
+        });
+    }
+
+    if (mobileActionsOverlay) {
+        mobileActionsOverlay.addEventListener('click', closeMobileActions);
+    }
+
+    if (mobileActionsCloseBtn) {
+        mobileActionsCloseBtn.addEventListener('click', closeMobileActions);
+    }
+
+    if (mobileAiActionBtn && toggleAiBtn) {
+        mobileAiActionBtn.addEventListener('click', () => {
+            closeMobileActions();
+            toggleAiBtn.click();
+        });
+    }
+
+    if (mobileFavActionBtn && favNavBtn) {
+        mobileFavActionBtn.addEventListener('click', () => {
+            closeMobileActions();
+            favNavBtn.click();
+        });
+    }
+
+    if (mobileProfileActionBtn && profileBtn) {
+        mobileProfileActionBtn.addEventListener('click', () => {
+            closeMobileActions();
+            profileBtn.click();
+        });
+    }
+
+    window.addEventListener('resize', () => {
+        updateNavbarOffset();
+        if (window.innerWidth > 768) {
+            closeMobileActions();
+        }
+    });
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeMobileActions();
+        }
+    });
 
     if (toggleAiBtn) {
         toggleAiBtn.addEventListener('click', () => {

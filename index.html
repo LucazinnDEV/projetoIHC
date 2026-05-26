@@ -69,6 +69,31 @@
         </div>
     </nav>
 
+    <!-- Menu lateral de ações (somente mobile) -->
+    <div class="mobile-actions-overlay" id="mobileActionsOverlay"></div>
+    <aside class="mobile-actions-sidebar" id="mobileActionsSidebar" aria-hidden="true">
+        <div class="mobile-actions-header">
+            <h3>Mais opções</h3>
+            <button class="mobile-actions-close" id="mobileActionsCloseBtn" aria-label="Fechar menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="mobile-actions-list">
+            <button class="mobile-action-item" id="mobileAiActionBtn">
+                <i class="fa-solid fa-robot" style="color: var(--secondary);"></i>
+                <span>Recife Hub AI</span>
+            </button>
+            <button class="mobile-action-item" id="mobileFavActionBtn">
+                <i class="fa-solid fa-star" style="color: #fbbf24;"></i>
+                <span>Favoritos</span>
+            </button>
+            <button class="mobile-action-item" id="mobileProfileActionBtn">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>Meu Perfil</span>
+            </button>
+        </div>
+    </aside>
+
     <!-- Main Map Area -->
     <main class="map-wrapper">
         <div id="loadingOverlay" class="loading-overlay">
