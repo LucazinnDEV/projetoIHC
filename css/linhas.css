@@ -25,6 +25,15 @@ body {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
+.nav-brand-link {
+    text-decoration: none;
+}
+
+.nav-brand-link:hover,
+.nav-brand-link:focus-visible {
+    text-decoration: none;
+}
+
 .pg-header h1 {
     font-size: 1.5rem;
     color: #0f172a;
@@ -32,9 +41,15 @@ body {
     margin: 0;
 }
 
-.pg-header i {
-    font-size: 1.8rem;
-    color: var(--primary);
+.pg-header .brand-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+}
+
+.pg-header .brand-icon i {
+    font-size: 0.95rem;
+    color: white;
 }
 
 .linhas-container {
