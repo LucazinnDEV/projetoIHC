@@ -850,6 +850,38 @@ function initUI() {
             }
         });
     });
+    // Help / Tutorial
+    const helpBtn = document.getElementById('helpBtn');
+    const helpConfirmModal = document.getElementById('helpConfirmModal');
+    const tutorialModal = document.getElementById('tutorialModal');
+    const helpConfirmYes = document.getElementById('helpConfirmYes');
+    const helpConfirmNo = document.getElementById('helpConfirmNo');
+    const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
+    const tutorialGotIt = document.getElementById('tutorialGotIt');
+    const closeHelpConfirm = document.getElementById('closeHelpConfirm');
+
+    if (helpBtn && helpConfirmModal) {
+        helpBtn.addEventListener('click', () => helpConfirmModal.classList.add('active'));
+    }
+    if (closeHelpConfirm) closeHelpConfirm.addEventListener('click', () => helpConfirmModal.classList.remove('active'));
+    if (helpConfirmNo) helpConfirmNo.addEventListener('click', () => helpConfirmModal.classList.remove('active'));
+    if (helpConfirmYes) helpConfirmYes.addEventListener('click', () => {
+        helpConfirmModal.classList.remove('active');
+        if (tutorialModal) tutorialModal.classList.add('active');
+    });
+    if (helpConfirmModal) {
+        helpConfirmModal.addEventListener('click', (e) => {
+            if (e.target === helpConfirmModal) helpConfirmModal.classList.remove('active');
+        });
+    }
+    if (tutorialModal) {
+        tutorialModal.addEventListener('click', (e) => {
+            if (e.target === tutorialModal) tutorialModal.classList.remove('active');
+        });
+    }
+    if (tutorialCloseBtn) tutorialCloseBtn.addEventListener('click', () => tutorialModal.classList.remove('active'));
+    if (tutorialGotIt) tutorialGotIt.addEventListener('click', () => tutorialModal.classList.remove('active'));
+
     // AI Chat Events
     const toggleAiBtn = document.getElementById('toggleAiBtn');
     const closeChatBtn = document.getElementById('closeChatBtn');

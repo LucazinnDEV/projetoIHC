@@ -265,7 +265,12 @@ body {
     position: absolute;
     bottom: 30px;
     right: 30px;
-    z-index: 1000;
+    z-index: 2100; /* acima do bottom-nav (2000) */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: auto;
 }
 
 .floating-btn {
@@ -289,6 +294,65 @@ body {
     color: white;
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.help-btn {
+    background: white;
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+}
+.help-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Tornar modais mais responsivos e com padding maior para o tutorial */
+.modal-content {
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+}
+
+.modal-content.tutorial-content .modal-body {
+    padding: 32px;
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 480px) {
+    .floating-controls {
+        right: 16px;
+        bottom: 88px; /* posiciona acima da bottom-nav */
+        align-items: flex-end;
+        gap: 12px;
+    }
+
+    .floating-controls .floating-btn {
+        min-width: 140px;
+        padding: 10px 14px;
+        border-radius: 20px;
+        font-size: 0.95rem;
+    }
+
+    .help-btn {
+        width: auto;
+        height: auto;
+        padding: 10px 14px;
+        border-radius: 20px;
+        font-size: 0.95rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 0 10px;
+        max-width: 560px;
+        border-radius: 16px;
+    }
 }
 
 /* Modals */
@@ -678,7 +742,7 @@ body {
     }
 
     .mobile-menu-btn { display: flex; }
-    .floating-controls { bottom: 20px; right: 20px; }
+    .floating-controls { bottom: 100px; right: 20px; }
     .terminal-info-box { padding: 18px 20px 24px; }
     .subtitle-brand-text { font-size: 0.62rem; }
 

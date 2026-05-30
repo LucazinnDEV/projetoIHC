@@ -104,6 +104,9 @@
         <div id="map"></div>
 
         <div class="floating-controls">
+            <button id="helpBtn" class="floating-btn help-btn" title="Ajuda">
+                <i class="fa-solid fa-circle-question"></i> Ajuda
+            </button>
             <button id="resetMapBtn" class="floating-btn" title="Mostrar todas as rotas">
                 <i class="fa-solid fa-location-dot"></i> Sua localização
             </button>
@@ -190,6 +193,44 @@
                         </div>
                         <ul class="history-list" id="profileHistoryList"></ul>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Confirmation Modal -->
+    <div class="modal-overlay" id="helpConfirmModal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>Precisa de ajuda?</h2>
+                <button class="close-btn" id="closeHelpConfirm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Deseja receber um passo a passo rápido sobre como encontrar uma linha de ônibus na plataforma?</p>
+                <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px;">
+                    <button class="save-btn" id="helpConfirmNo" style="background:#ef4444;">Não</button>
+                    <button class="save-btn" id="helpConfirmYes">Sim, quero ajuda</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div class="modal-overlay" id="tutorialModal">
+        <div class="modal-content glass-panel tutorial-content">
+            <div class="modal-header">
+                <h2>Como encontrar uma linha</h2>
+                <button class="close-btn" id="tutorialCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <ol style="line-height:1.6;">
+                    <li>Use a barra de busca no topo e digite o número ou nome da linha que procura.</li>
+                    <li>Selecione a rota desejada na lista de resultados — ela será exibida no mapa.</li>
+                    <li>Clique na linha mostrada no mapa para ver detalhes como paradas, tarifa e terminal.</li>
+                    <li>Use o botão "Sua localização" para centralizar o mapa onde você está.</li>
+                </ol>
+                <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+                    <button class="save-btn" id="tutorialGotIt">Entendi</button>
                 </div>
             </div>
         </div>
