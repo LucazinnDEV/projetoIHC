@@ -6,6 +6,10 @@ let allStopsLayer;
 let highlightedLayerGroup;
 let currentFavoriteBtn = null
 let selectedRouteId = null;
+let isInfoSidebarMinimized = false;
+let isInfoSidebarActive = false;
+let sidebarDragStartY = 0;
+let sidebarDragStartX = 0;
 
 let userMarker = null;           // marcador azul  do usuário
 let nearbyStopMarkers = [];      // marcadores de terminais próximos
@@ -74,7 +78,9 @@ function initMap() {
     highlightedLayerGroup = L.layerGroup().addTo(map);
 
     map.on('click', () => {
-        closeInfoSidebar();
+        if (isInfoSidebarActive && !isInfoSidebarMinimized) {
+            minimizeInfoSidebar();
+        }
     });
 }
 
@@ -302,6 +308,8 @@ function closeRoutePanel() {
 
 // Sidebar de informações
 function openInfoSidebar(type, data) {
+    isInfoSidebarActive = true;
+    isInfoSidebarMinimized = false;
     const sidebar = document.getElementById('infoSidebar');
     const iconEl = sidebar.querySelector('.sidebar-icon');
     const titleEl = sidebar.querySelector('.sidebar-title');
@@ -450,7 +458,23 @@ function openInfoSidebar(type, data) {
 }
 
 function closeInfoSidebar() {
-    document.getElementById('infoSidebar').classList.remove('active');
+    const sidebar = document.getElementById('infoSidebar');
+    sidebar.classList.remove('active');
+    sidebar.classList.remove('minimized');
+    isInfoSidebarActive = false;
+    isInfoSidebarMinimized = false;
+}
+
+function minimizeInfoSidebar() {
+    const sidebar = document.getElementById('infoSidebar');
+    sidebar.classList.add('minimized');
+    isInfoSidebarMinimized = true;
+}
+
+function expandInfoSidebar() {
+    const sidebar = document.getElementById('infoSidebar');
+    sidebar.classList.remove('minimized');
+    isInfoSidebarMinimized = false;
 }
 
 function openTerminalInfo(terminalName) {
@@ -1009,6 +1033,9 @@ function initUI() {
             if (e.key === 'Enter') handleUserChatMessage();
         });
     }
+
+    // Setup sidebar drag/minimization functionality
+    initSidebarDragHandling();
 }
 
 function renderSearchDropdown(query = '') {
@@ -1061,6 +1088,111 @@ function renderSearchDropdown(query = '') {
 
 function closeSearchDropdown() {
     document.getElementById('searchDropdown').classList.remove('active');
+}
+
+// Sidebar Drag and Minimize Functionality
+function initSidebarDragHandling() {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar) return;
+
+    // Create drag handle if it doesn't exist
+    let dragHandle = sidebar.querySelector('.sidebar-drag-handle');
+    if (!dragHandle) {
+        dragHandle = document.createElement('div');
+        dragHandle.className = 'sidebar-drag-handle';
+        dragHandle.innerHTML = '<div class="drag-indicator"></div>';
+        sidebar.insertBefore(dragHandle, sidebar.firstChild);
+    }
+
+    // Mouse events for desktop
+    sidebar.addEventListener('mousedown', handleSidebarDragStart);
+    document.addEventListener('mousemove', handleSidebarDragMove);
+    document.addEventListener('mouseup', handleSidebarDragEnd);
+
+    // Touch events for mobile
+    sidebar.addEventListener('touchstart', handleSidebarDragStart);
+    document.addEventListener('touchmove', handleSidebarDragMove);
+    document.addEventListener('touchend', handleSidebarDragEnd);
+
+    // Click on drag handle to toggle
+    dragHandle.addEventListener('click', () => {
+        if (isInfoSidebarActive) {
+            if (isInfoSidebarMinimized) {
+                expandInfoSidebar();
+            } else {
+                minimizeInfoSidebar();
+            }
+        }
+    });
+}
+
+function handleSidebarDragStart(e) {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar || !isInfoSidebarActive) return;
+    
+    // Only handle drag on handle or header area
+    const dragHandle = sidebar.querySelector('.sidebar-drag-handle');
+    if (!e.target.closest('.sidebar-drag-handle') && !e.target.closest('.sidebar-header')) {
+        return;
+    }
+
+    sidebarDragStartY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    sidebarDragStartX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    sidebar.classList.add('dragging');
+}
+
+function handleSidebarDragMove(e) {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar || !sidebar.classList.contains('dragging') || !isInfoSidebarActive) return;
+
+    const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    
+    // Only handle vertical drag on desktop, both on mobile
+    const isDesktop = window.innerWidth > 768;
+    if (isDesktop && Math.abs(currentX - sidebarDragStartX) > 10) {
+        return; // Horizontal drag on desktop, ignore
+    }
+
+    const deltaY = currentY - sidebarDragStartY;
+    
+    // Visual feedback during drag
+    if (!isDesktop) {
+        // Mobile: translate downward when minimized
+        if (isInfoSidebarMinimized && deltaY > 0) {
+            const progress = Math.max(0, Math.min(1, deltaY / 150));
+            sidebar.style.transform = `translateY(${deltaY}px)`;
+            sidebar.style.opacity = Math.max(0.7, 1 - progress * 0.3);
+        }
+    }
+}
+
+function handleSidebarDragEnd(e) {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar || !sidebar.classList.contains('dragging')) return;
+
+    sidebar.classList.remove('dragging');
+    sidebar.style.transform = '';
+    sidebar.style.opacity = '';
+
+    const currentY = e.type.includes('touch') ? e.changedTouches[0].clientY : e.clientY;
+    const deltaY = currentY - sidebarDragStartY;
+    const isDesktop = window.innerWidth > 768;
+
+    if (!isDesktop) {
+        // Mobile: if dragged more than 150px downward, minimize
+        if (deltaY > 150) {
+            minimizeInfoSidebar();
+        } else if (deltaY < -100) {
+            // If dragged upward significantly, expand
+            expandInfoSidebar();
+        }
+    } else {
+        // Desktop: if dragged enough to the right from minimized state, expand
+        if (isInfoSidebarMinimized && deltaY < -50) {
+            expandInfoSidebar();
+        }
+    }
 }
 
 // Histórico
