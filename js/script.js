@@ -1339,7 +1339,8 @@ function getSystemPrompt() {
     2. Seja prestativo, claro e conciso (máximo 3 parágrafos).
     3. Use um tom amigável (estilo WhatsApp) e chame pelo nome do usuário, que é ${username}.
     4. IMPORTANTE: Sempre que mencionar uma das "ROTAS DISPONÍVEIS", escreva o nome completo da rota exatamente como listado.
-    5. Se não tiver certeza de algo, oriente o usuário a verificar o mapa ou usar a busca.`;
+    5. Se não tiver certeza de algo, oriente o usuário a verificar o mapa ou usar a busca.
+    6. Na primeira interação com o usuário, cumprimente-o e descreva como o usuário pode interagir com você para obter informações sobre as rotas. Exemplo: "Para me utilizar, me diga seu destino e vou te passar as rotas disponíveis".`;
 }
 
 // Initialize chat history with dynamic prompt
