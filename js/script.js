@@ -361,6 +361,13 @@ function openInfoSidebar(type, data) {
                 </div>
                 
                 <div class="info-item">
+                <i class="fa-solid fa-school" style="color:#64748b;"></i>
+                <div>
+                <div class="info-label">Empresa</div>
+                <div class="info-value">${data.enterprise || '—'}</div>
+                </div>
+                </div>
+                <div class="info-item">
                 <i class="fa-solid fa-coins" style="color:#64748b;"></i>
                 <div>
                 <div class="info-label">Tarifa</div>
