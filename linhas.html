@@ -23,16 +23,19 @@
     <header class="pg-header">
         <a class="nav-brand nav-brand-link" href="index.html" aria-label="Ir para a página inicial">
             <div class="brand-icon">
-                <i class="fa-solid fa-bus-simple"></i>
+                <i class="fa-solid fa-bus-simple" aria-hidden="true"></i>
             </div>
             <div class="text-title-container">
                 <span class="brand-text">Recife Hub</span>
                 <p class="subtitle-brand-text">Explore as linhas disponíveis</p>
             </div>
         </a>
+        <button class="icon-btn theme-toggle-btn" id="themeToggleBtn" title="Modo escuro" aria-label="Ativar modo escuro">
+            <i class="fa-solid fa-moon"></i>
+        </button>
     </header>
 
-    <main class="linhas-container" id="linhasContainer">
+    <main class="linhas-container" id="linhasContainer" aria-label="Lista de linhas de ônibus">
         <!-- Loader inicial -->
         <div style="text-align: center; width: 100%; grid-column: 1 / -1; padding: 60px; color: #64748b;">
             <i class="fa-solid fa-circle-notch fa-spin"
@@ -42,13 +45,13 @@
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <div class="bottom-nav" id="bottomNav">
-        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home"
+    <div class="bottom-nav" id="bottomNav" role="navigation" aria-label="Navegação principal">
+        <button class="bottom-nav-btn home-nav-btn" id="navHome" title="Home" aria-label="Ir para Home"
             onclick="window.location.href='index.html'">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house" aria-hidden="true"></i>
         </button>
-        <button class="bottom-nav-btn linhas-nav-btn" id="navLinhas" title="Linhas">
-            <i class="fa-solid fa-route"></i>
+        <button class="bottom-nav-btn linhas-nav-btn" id="navLinhas" title="Linhas" aria-label="Ver linhas de ônibus (página atual)" aria-current="page">
+            <i class="fa-solid fa-route" aria-hidden="true"></i>
         </button>
     </div>
 
