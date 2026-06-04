@@ -10,6 +10,10 @@ let isInfoSidebarMinimized = false;
 let isInfoSidebarActive = false;
 let sidebarDragStartY = 0;
 let sidebarDragStartX = 0;
+// Initialization guards to avoid duplicate listeners
+let __recifeHubUIInitialized = false;
+let __sidebarDragInitialized = false;
+let __dropdownDelegated = false;
 
 let userMarker = null;           // marcador azul  do usuário
 let nearbyStopMarkers = [];      // marcadores de terminais próximos
@@ -782,6 +786,9 @@ function resetMap() {
 
 // UI
 function initUI() {
+    if (__recifeHubUIInitialized) return; // prevent duplicate initialization
+    __recifeHubUIInitialized = true;
+
     const searchInput = document.getElementById('searchInput');
     const searchDropdown = document.getElementById('searchDropdown');
     const dropdownList = document.getElementById('dropdownList');
@@ -797,6 +804,19 @@ function initUI() {
         clearSearchBtn.style.display = query ? 'block' : 'none';
         renderSearchDropdown(query);
     });
+
+    // Delegate clicks on dropdown list to avoid per-item listeners
+    if (dropdownList && !__dropdownDelegated) {
+        dropdownList.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const id = li.dataset.routeId;
+            if (!id) return;
+            const route = busRoutes.find(r => r.id.toString() === id.toString());
+            if (route) selectRoute(route);
+        });
+        __dropdownDelegated = true;
+    }
 
     clearSearchBtn.addEventListener('click', () => {
         resetMap();
@@ -1080,7 +1100,9 @@ function renderSearchDropdown(query = '') {
     const dropdownList = document.getElementById('dropdownList');
     const dropdownHeader = document.getElementById('dropdownHeader');
 
+    // Use DocumentFragment and data attributes to minimize DOM ops and avoid per-item listeners
     dropdownList.innerHTML = '';
+    const fragment = document.createDocumentFragment();
 
     if (!query) {
         const history = getHistory();
@@ -1091,35 +1113,35 @@ function renderSearchDropdown(query = '') {
         dropdownHeader.innerText = "Pesquisas Recentes";
         history.slice(0, 5).forEach(route => {
             const li = document.createElement('li');
+            li.dataset.routeId = route.id;
             li.innerHTML = `
                 <i class="fa-solid fa-clock-rotate-left recent-item-icon"></i>
                 <div class="route-color-dot" style="background:${route.color}"></div>
                 <span class="route-name">${route.name}</span>
             `;
-            li.addEventListener('click', () => {
-                const fullRoute = busRoutes.find(r => r.id === route.id);
-                if (fullRoute) selectRoute(fullRoute);
-            });
-            dropdownList.appendChild(li);
+            fragment.appendChild(li);
         });
     } else {
         dropdownHeader.innerText = "Resultados da Busca";
         const matches = busRoutes.filter(r => r.name.toLowerCase().includes(query));
         if (matches.length === 0) {
             dropdownList.innerHTML = `<li style="justify-content:center; color:#888;">Nenhuma rota encontrada :/</li>`;
+            searchDropdown.classList.add('active');
+            return;
         } else {
             matches.forEach(route => {
                 const li = document.createElement('li');
+                li.dataset.routeId = route.id;
                 li.innerHTML = `
                     <div class="route-color-dot" style="background:${route.color}"></div>
                     <span class="route-name">${route.name}</span>
                 `;
-                li.addEventListener('click', () => selectRoute(route));
-                dropdownList.appendChild(li);
+                fragment.appendChild(li);
             });
         }
     }
 
+    dropdownList.appendChild(fragment);
     searchDropdown.classList.add('active');
 }
 
@@ -1130,8 +1152,13 @@ function closeSearchDropdown() {
 // Sidebar Drag and Minimize Functionality (Mobile only)
 function initSidebarDragHandling() {
     const isDesktop = window.innerWidth > 768;
+    if (isDesktop) return; // Only on mobile
+
+    if (__sidebarDragInitialized) return; // already initialized
+    __sidebarDragInitialized = true;
+
     const sidebar = document.getElementById('infoSidebar');
-    if (!sidebar || isDesktop) return; // Only on mobile
+    if (!sidebar) return;
 
     // Get or create drag handle
     let dragHandle = sidebar.querySelector('.sidebar-drag-handle');
