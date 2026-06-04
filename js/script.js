@@ -6,6 +6,14 @@ let allStopsLayer;
 let highlightedLayerGroup;
 let currentFavoriteBtn = null
 let selectedRouteId = null;
+let isInfoSidebarMinimized = false;
+let isInfoSidebarActive = false;
+let sidebarDragStartY = 0;
+let sidebarDragStartX = 0;
+// Initialization guards to avoid duplicate listeners
+let __recifeHubUIInitialized = false;
+let __sidebarDragInitialized = false;
+let __dropdownDelegated = false;
 
 let userMarker = null;           // marcador azul  do usuário
 let nearbyStopMarkers = [];      // marcadores de terminais próximos
@@ -74,7 +82,11 @@ function initMap() {
     highlightedLayerGroup = L.layerGroup().addTo(map);
 
     map.on('click', () => {
-        closeInfoSidebar();
+        // Mobile only: minimize sidebar on map click
+        const isDesktop = window.innerWidth > 768;
+        if (!isDesktop && isInfoSidebarActive && !isInfoSidebarMinimized) {
+            minimizeInfoSidebar();
+        }
     });
 }
 
@@ -302,6 +314,8 @@ function closeRoutePanel() {
 
 // Sidebar de informações
 function openInfoSidebar(type, data) {
+    isInfoSidebarActive = true;
+    isInfoSidebarMinimized = false;
     const sidebar = document.getElementById('infoSidebar');
     const iconEl = sidebar.querySelector('.sidebar-icon');
     const titleEl = sidebar.querySelector('.sidebar-title');
@@ -346,6 +360,13 @@ function openInfoSidebar(type, data) {
                 </div>
                 </div>
                 
+                <div class="info-item">
+                <i class="fa-solid fa-building" style="color:#64748b;"></i>
+                <div>
+                <div class="info-label">Empresa</div>
+                <div class="info-value">${data.enterprise || '—'}</div>
+                </div>
+                </div>
                 <div class="info-item">
                 <i class="fa-solid fa-coins" style="color:#64748b;"></i>
                 <div>
@@ -450,7 +471,41 @@ function openInfoSidebar(type, data) {
 }
 
 function closeInfoSidebar() {
-    document.getElementById('infoSidebar').classList.remove('active');
+    const sidebar = document.getElementById('infoSidebar');
+    sidebar.classList.remove('active');
+    sidebar.classList.remove('minimized');
+    isInfoSidebarActive = false;
+    isInfoSidebarMinimized = false;
+
+    // Clear the selected route visual elements
+    if (currentSelectedRoute) {
+        currentSelectedRoute = null;
+
+        // Hide the polylines
+        Object.values(routeLayers).forEach(({ polylineGo, polylineReturn, returnColor, data }) => {
+            polylineGo.setStyle({ color: data.color, weight: 4, opacity: 0 });
+            polylineReturn.setStyle({ color: returnColor, weight: 4, opacity: 0 });
+        });
+
+        // Clear highlights and stop markers
+        highlightedLayerGroup.clearLayers();
+        clearRouteStopMarkers();
+
+        // Restore user and nearby markers
+        restoreUserAndNearbyMarkers();
+    }
+}
+
+function minimizeInfoSidebar() {
+    const sidebar = document.getElementById('infoSidebar');
+    sidebar.classList.add('minimized');
+    isInfoSidebarMinimized = true;
+}
+
+function expandInfoSidebar() {
+    const sidebar = document.getElementById('infoSidebar');
+    sidebar.classList.remove('minimized');
+    isInfoSidebarMinimized = false;
 }
 
 function openTerminalInfo(terminalName) {
@@ -738,6 +793,9 @@ function resetMap() {
 
 // UI
 function initUI() {
+    if (__recifeHubUIInitialized) return; // prevent duplicate initialization
+    __recifeHubUIInitialized = true;
+
     const searchInput = document.getElementById('searchInput');
     const searchDropdown = document.getElementById('searchDropdown');
     const dropdownList = document.getElementById('dropdownList');
@@ -753,6 +811,19 @@ function initUI() {
         clearSearchBtn.style.display = query ? 'block' : 'none';
         renderSearchDropdown(query);
     });
+
+    // Delegate clicks on dropdown list to avoid per-item listeners
+    if (dropdownList && !__dropdownDelegated) {
+        dropdownList.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const id = li.dataset.routeId;
+            if (!id) return;
+            const route = busRoutes.find(r => r.id.toString() === id.toString());
+            if (route) selectRoute(route);
+        });
+        __dropdownDelegated = true;
+    }
 
     clearSearchBtn.addEventListener('click', () => {
         resetMap();
@@ -980,6 +1051,15 @@ function initUI() {
             document.body.classList.add('chat-open');
             chatInput.focus();
 
+            // Hide floating controls on mobile when chat opens
+            const floatingControls = document.querySelector('.floating-controls');
+            const isMobile = window.innerWidth <= 768;
+            if (floatingControls && isMobile) {
+                floatingControls.style.pointerEvents = 'none';
+                floatingControls.style.opacity = '0';
+                floatingControls.style.transition = 'opacity 0.3s ease';
+            }
+
             // Personalize greeting if name is set
             const userData = localStorage.getItem(STORAGE_KEY_USER);
             if (userData) {
@@ -1000,6 +1080,14 @@ function initUI() {
         closeChatBtn.addEventListener('click', () => {
             chatAssistant.classList.remove('active');
             document.body.classList.remove('chat-open');
+
+            // Restore floating controls on mobile when chat closes
+            const floatingControls = document.querySelector('.floating-controls');
+            const isMobile = window.innerWidth <= 768;
+            if (floatingControls && isMobile) {
+                floatingControls.style.pointerEvents = 'auto';
+                floatingControls.style.opacity = '1';
+            }
         });
     }
 
@@ -1009,6 +1097,9 @@ function initUI() {
             if (e.key === 'Enter') handleUserChatMessage();
         });
     }
+
+    // Setup sidebar drag/minimization functionality
+    initSidebarDragHandling();
 }
 
 function renderSearchDropdown(query = '') {
@@ -1016,7 +1107,9 @@ function renderSearchDropdown(query = '') {
     const dropdownList = document.getElementById('dropdownList');
     const dropdownHeader = document.getElementById('dropdownHeader');
 
+    // Use DocumentFragment and data attributes to minimize DOM ops and avoid per-item listeners
     dropdownList.innerHTML = '';
+    const fragment = document.createDocumentFragment();
 
     if (!query) {
         const history = getHistory();
@@ -1027,40 +1120,202 @@ function renderSearchDropdown(query = '') {
         dropdownHeader.innerText = "Pesquisas Recentes";
         history.slice(0, 5).forEach(route => {
             const li = document.createElement('li');
+            li.dataset.routeId = route.id;
             li.innerHTML = `
                 <i class="fa-solid fa-clock-rotate-left recent-item-icon"></i>
                 <div class="route-color-dot" style="background:${route.color}"></div>
                 <span class="route-name">${route.name}</span>
             `;
-            li.addEventListener('click', () => {
-                const fullRoute = busRoutes.find(r => r.id === route.id);
-                if (fullRoute) selectRoute(fullRoute);
-            });
-            dropdownList.appendChild(li);
+            fragment.appendChild(li);
         });
     } else {
         dropdownHeader.innerText = "Resultados da Busca";
-        const matches = busRoutes.filter(r => r.name.toLowerCase().includes(query));
+
+        const enterpriseMatch = busRoutes.filter(r =>
+            r.enterprise && r.enterprise.toLowerCase().includes(query)
+        );
+        const nameMatch = busRoutes.filter(r =>
+            r.name.toLowerCase().includes(query) &&
+            !enterpriseMatch.includes(r)
+        );
+        const matches = [...enterpriseMatch, ...nameMatch];
+
         if (matches.length === 0) {
             dropdownList.innerHTML = `<li style="justify-content:center; color:#888;">Nenhuma rota encontrada :/</li>`;
-        } else {
-            matches.forEach(route => {
+            searchDropdown.classList.add('active');
+            return;
+        }
+
+        // If results include enterprise matches, show a header label for them
+        if (enterpriseMatch.length > 0) {
+            const groupHeader = document.createElement('li');
+            groupHeader.className = 'dropdown-group-header';
+            groupHeader.innerHTML = `<i class="fa-solid fa-building"></i> Empresa: ${enterpriseMatch[0].enterprise}`;
+            groupHeader.style.cssText = 'pointer-events:none; color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; padding: 6px 14px 2px; gap:6px;';
+            fragment.appendChild(groupHeader);
+
+            enterpriseMatch.forEach(route => {
                 const li = document.createElement('li');
+                li.dataset.routeId = route.id;
                 li.innerHTML = `
                     <div class="route-color-dot" style="background:${route.color}"></div>
                     <span class="route-name">${route.name}</span>
+                    <span style="margin-left:auto; font-size:0.7rem; color:#94a3b8; white-space:nowrap;">${route.enterprise}</span>
                 `;
-                li.addEventListener('click', () => selectRoute(route));
-                dropdownList.appendChild(li);
+                fragment.appendChild(li);
             });
+
+            if (nameMatch.length > 0) {
+                const sep = document.createElement('li');
+                sep.className = 'dropdown-group-header';
+                sep.innerHTML = `<i class="fa-solid fa-route"></i> Outras rotas`;
+                sep.style.cssText = 'pointer-events:none; color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; padding: 6px 14px 2px; gap:6px; border-top:1px solid rgba(0,0,0,0.06); margin-top:4px;';
+                fragment.appendChild(sep);
+            }
         }
+
+        nameMatch.forEach(route => {
+            const li = document.createElement('li');
+            li.dataset.routeId = route.id;
+            li.innerHTML = `
+                <div class="route-color-dot" style="background:${route.color}"></div>
+                <span class="route-name">${route.name}</span>
+                <span style="margin-left:auto; font-size:0.7rem; color:#94a3b8; white-space:nowrap;">${route.enterprise || ''}</span>
+            `;
+            fragment.appendChild(li);
+        });
     }
 
+    dropdownList.appendChild(fragment);
     searchDropdown.classList.add('active');
 }
 
 function closeSearchDropdown() {
     document.getElementById('searchDropdown').classList.remove('active');
+}
+
+// Sidebar Drag and Minimize Functionality (Mobile only)
+function initSidebarDragHandling() {
+    const isDesktop = window.innerWidth > 768;
+    if (isDesktop) return; // Only on mobile
+
+    if (__sidebarDragInitialized) return; // already initialized
+    __sidebarDragInitialized = true;
+
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar) return;
+
+    // Get or create drag handle
+    let dragHandle = sidebar.querySelector('.sidebar-drag-handle');
+    if (!dragHandle) {
+        dragHandle = document.createElement('div');
+        dragHandle.className = 'sidebar-drag-handle';
+        dragHandle.innerHTML = '<div class="drag-indicator"></div>';
+        sidebar.insertBefore(dragHandle, sidebar.firstChild);
+    }
+
+    // Touch events (mobile)
+    sidebar.addEventListener('touchstart', handleSidebarDragStart, { passive: false });
+    document.addEventListener('touchmove', handleSidebarDragMove, { passive: false });
+    document.addEventListener('touchend', handleSidebarDragEnd);
+
+    // Click on drag handle to toggle
+    dragHandle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isInfoSidebarActive) {
+            if (isInfoSidebarMinimized) {
+                expandInfoSidebar();
+            } else {
+                minimizeInfoSidebar();
+            }
+        }
+    });
+
+    // Also handle clicks on the sidebar when minimized (larger touch area)
+    sidebar.addEventListener('click', (e) => {
+        if (isInfoSidebarActive && isInfoSidebarMinimized && !e.target.closest('.drag-indicator')) {
+            if (e.target.closest('.sidebar-drag-handle') || e.target === sidebar) {
+                expandInfoSidebar();
+            }
+        }
+    });
+}
+
+function handleSidebarDragStart(e) {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar || !isInfoSidebarActive) return;
+    
+    // Allow drag from anywhere on the sidebar when minimized
+    // When expanded, only from handle and header
+    const isMinimized = sidebar.classList.contains('minimized');
+    
+    if (!isMinimized) {
+        const dragHandle = sidebar.querySelector('.sidebar-drag-handle');
+        if (!e.target.closest('.sidebar-drag-handle') && !e.target.closest('.sidebar-header')) {
+            return;
+        }
+    }
+
+    sidebarDragStartY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    sidebarDragStartX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    sidebar.classList.add('dragging');
+}
+
+function handleSidebarDragMove(e) {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar || !sidebar.classList.contains('dragging') || !isInfoSidebarActive) return;
+
+    const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    
+    // Only handle vertical drag on mobile
+    const isDesktop = window.innerWidth > 768;
+    if (isDesktop) return; // No drag visual feedback on desktop
+
+    const deltaY = currentY - sidebarDragStartY;
+    
+    // Visual feedback during drag (both directions)
+    if (isInfoSidebarMinimized) {
+        // When minimized, can drag up (negative) or down (positive)
+        if (Math.abs(deltaY) > 10) {
+            const progress = Math.max(0, Math.min(1, Math.abs(deltaY) / 150));
+            sidebar.style.transform = `translateY(${deltaY}px)`;
+            sidebar.style.opacity = Math.max(0.7, 1 - progress * 0.2);
+        }
+    }
+}
+
+function handleSidebarDragEnd(e) {
+    const sidebar = document.getElementById('infoSidebar');
+    if (!sidebar || !sidebar.classList.contains('dragging')) return;
+
+    sidebar.classList.remove('dragging');
+    sidebar.style.transform = '';
+    sidebar.style.opacity = '';
+
+    const currentY = e.type.includes('touch') ? e.changedTouches[0].clientY : e.clientY;
+    const deltaY = currentY - sidebarDragStartY;
+    const isDesktop = window.innerWidth > 768;
+
+    if (!isDesktop) {
+        if (isInfoSidebarMinimized) {
+            // When minimized: drag up to expand, drag down to dismiss
+            if (deltaY < -50) {
+                // Dragged upward >= 50px -> expand
+                expandInfoSidebar();
+            }
+        } else {
+            // When expanded: drag down to minimize
+            if (deltaY > 100) {
+                minimizeInfoSidebar();
+            }
+        }
+    } else {
+        // Desktop: if dragged enough to the right from minimized state, expand
+        if (isInfoSidebarMinimized && deltaY < -50) {
+            expandInfoSidebar();
+        }
+    }
 }
 
 // Histórico
@@ -1339,7 +1594,8 @@ function getSystemPrompt() {
     2. Seja prestativo, claro e conciso (máximo 3 parágrafos).
     3. Use um tom amigável (estilo WhatsApp) e chame pelo nome do usuário, que é ${username}.
     4. IMPORTANTE: Sempre que mencionar uma das "ROTAS DISPONÍVEIS", escreva o nome completo da rota exatamente como listado.
-    5. Se não tiver certeza de algo, oriente o usuário a verificar o mapa ou usar a busca.`;
+    5. Se não tiver certeza de algo, oriente o usuário a verificar o mapa ou usar a busca.
+    6. Na primeira interação com o usuário, cumprimente-o e descreva como o usuário pode interagir com você para obter informações sobre as rotas. Exemplo: "Para me utilizar, me diga seu destino e vou te passar as rotas disponíveis".`;
 }
 
 // Initialize chat history with dynamic prompt
