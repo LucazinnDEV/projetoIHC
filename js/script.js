@@ -78,7 +78,9 @@ function initMap() {
     highlightedLayerGroup = L.layerGroup().addTo(map);
 
     map.on('click', () => {
-        if (isInfoSidebarActive && !isInfoSidebarMinimized) {
+        // Mobile only: minimize sidebar on map click
+        const isDesktop = window.innerWidth > 768;
+        if (!isDesktop && isInfoSidebarActive && !isInfoSidebarMinimized) {
             minimizeInfoSidebar();
         }
     });
@@ -1090,12 +1092,13 @@ function closeSearchDropdown() {
     document.getElementById('searchDropdown').classList.remove('active');
 }
 
-// Sidebar Drag and Minimize Functionality
+// Sidebar Drag and Minimize Functionality (Mobile only)
 function initSidebarDragHandling() {
+    const isDesktop = window.innerWidth > 768;
     const sidebar = document.getElementById('infoSidebar');
-    if (!sidebar) return;
+    if (!sidebar || isDesktop) return; // Only on mobile
 
-    // Create drag handle if it doesn't exist
+    // Get or create drag handle
     let dragHandle = sidebar.querySelector('.sidebar-drag-handle');
     if (!dragHandle) {
         dragHandle = document.createElement('div');
@@ -1104,23 +1107,28 @@ function initSidebarDragHandling() {
         sidebar.insertBefore(dragHandle, sidebar.firstChild);
     }
 
-    // Mouse events for desktop
-    sidebar.addEventListener('mousedown', handleSidebarDragStart);
-    document.addEventListener('mousemove', handleSidebarDragMove);
-    document.addEventListener('mouseup', handleSidebarDragEnd);
-
-    // Touch events for mobile
-    sidebar.addEventListener('touchstart', handleSidebarDragStart);
-    document.addEventListener('touchmove', handleSidebarDragMove);
+    // Touch events (mobile)
+    sidebar.addEventListener('touchstart', handleSidebarDragStart, { passive: false });
+    document.addEventListener('touchmove', handleSidebarDragMove, { passive: false });
     document.addEventListener('touchend', handleSidebarDragEnd);
 
     // Click on drag handle to toggle
-    dragHandle.addEventListener('click', () => {
+    dragHandle.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (isInfoSidebarActive) {
             if (isInfoSidebarMinimized) {
                 expandInfoSidebar();
             } else {
                 minimizeInfoSidebar();
+            }
+        }
+    });
+
+    // Also handle clicks on the sidebar when minimized (larger touch area)
+    sidebar.addEventListener('click', (e) => {
+        if (isInfoSidebarActive && isInfoSidebarMinimized && !e.target.closest('.drag-indicator')) {
+            if (e.target.closest('.sidebar-drag-handle') || e.target === sidebar) {
+                expandInfoSidebar();
             }
         }
     });
@@ -1130,10 +1138,15 @@ function handleSidebarDragStart(e) {
     const sidebar = document.getElementById('infoSidebar');
     if (!sidebar || !isInfoSidebarActive) return;
     
-    // Only handle drag on handle or header area
-    const dragHandle = sidebar.querySelector('.sidebar-drag-handle');
-    if (!e.target.closest('.sidebar-drag-handle') && !e.target.closest('.sidebar-header')) {
-        return;
+    // Allow drag from anywhere on the sidebar when minimized
+    // When expanded, only from handle and header
+    const isMinimized = sidebar.classList.contains('minimized');
+    
+    if (!isMinimized) {
+        const dragHandle = sidebar.querySelector('.sidebar-drag-handle');
+        if (!e.target.closest('.sidebar-drag-handle') && !e.target.closest('.sidebar-header')) {
+            return;
+        }
     }
 
     sidebarDragStartY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
@@ -1148,21 +1161,19 @@ function handleSidebarDragMove(e) {
     const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
     const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     
-    // Only handle vertical drag on desktop, both on mobile
+    // Only handle vertical drag on mobile
     const isDesktop = window.innerWidth > 768;
-    if (isDesktop && Math.abs(currentX - sidebarDragStartX) > 10) {
-        return; // Horizontal drag on desktop, ignore
-    }
+    if (isDesktop) return; // No drag visual feedback on desktop
 
     const deltaY = currentY - sidebarDragStartY;
     
-    // Visual feedback during drag
-    if (!isDesktop) {
-        // Mobile: translate downward when minimized
-        if (isInfoSidebarMinimized && deltaY > 0) {
-            const progress = Math.max(0, Math.min(1, deltaY / 150));
+    // Visual feedback during drag (both directions)
+    if (isInfoSidebarMinimized) {
+        // When minimized, can drag up (negative) or down (positive)
+        if (Math.abs(deltaY) > 10) {
+            const progress = Math.max(0, Math.min(1, Math.abs(deltaY) / 150));
             sidebar.style.transform = `translateY(${deltaY}px)`;
-            sidebar.style.opacity = Math.max(0.7, 1 - progress * 0.3);
+            sidebar.style.opacity = Math.max(0.7, 1 - progress * 0.2);
         }
     }
 }
@@ -1180,12 +1191,17 @@ function handleSidebarDragEnd(e) {
     const isDesktop = window.innerWidth > 768;
 
     if (!isDesktop) {
-        // Mobile: if dragged more than 150px downward, minimize
-        if (deltaY > 150) {
-            minimizeInfoSidebar();
-        } else if (deltaY < -100) {
-            // If dragged upward significantly, expand
-            expandInfoSidebar();
+        if (isInfoSidebarMinimized) {
+            // When minimized: drag up to expand, drag down to dismiss
+            if (deltaY < -50) {
+                // Dragged upward >= 50px -> expand
+                expandInfoSidebar();
+            }
+        } else {
+            // When expanded: drag down to minimize
+            if (deltaY > 100) {
+                minimizeInfoSidebar();
+            }
         }
     } else {
         // Desktop: if dragged enough to the right from minimized state, expand
