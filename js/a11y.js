@@ -27,6 +27,64 @@
     const POPUP_SELECTOR = '.integration-info-popup';
     const POPUP_CLOSER   = '.integration-info-close';
 
+    /* Leitor de tela: região aria-live */
+    var _announcer = null;
+    function getAnnouncer() {
+        if (!_announcer) {
+            _announcer = document.createElement('div');
+            _announcer.setAttribute('aria-live', 'polite');
+            _announcer.setAttribute('aria-atomic', 'true');
+            _announcer.className = 'rh-sr-only';
+            _announcer.id = 'rh-announcer';
+            document.body.appendChild(_announcer);
+        }
+        return _announcer;
+    }
+    function announce(msg) {
+        var el = getAnnouncer();
+        el.textContent = '';
+        setTimeout(function () { el.textContent = msg; }, 50);
+    }
+
+    /* Modo escuro */
+    function applyTheme(dark) {
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        updateThemeBtns(dark);
+    }
+
+    function updateThemeBtns(dark) {
+        document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+            var icon = btn.querySelector('i');
+            if (icon) {
+                var extra = icon.classList.contains('theme-toggle-icon') ? ' theme-toggle-icon' : '';
+                icon.className = (dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon') + extra;
+            }
+            var label = btn.querySelector('.theme-toggle-label');
+            if (label) label.textContent = dark ? 'Modo claro' : 'Modo escuro';
+            btn.setAttribute('aria-label', dark ? 'Ativar modo claro' : 'Ativar modo escuro');
+            btn.title = dark ? 'Modo claro' : 'Modo escuro';
+        });
+    }
+
+    function toggleTheme() {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        var newDark = !isDark;
+        localStorage.setItem('rh-theme', newDark ? 'dark' : 'light');
+        applyTheme(newDark);
+        announce(newDark ? 'Modo escuro ativado' : 'Modo claro ativado');
+    }
+
+    function initDarkMode() {
+        var saved = localStorage.getItem('rh-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(saved ? saved === 'dark' : prefersDark);
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                if (!localStorage.getItem('rh-theme')) applyTheme(e.matches);
+            });
+        }
+    }
+
     function isVisible(el) {
         return !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length));
     }
@@ -157,7 +215,7 @@
             if (!li.querySelector('.route-name')) return;
             li.dataset.rhKeyable = 'true';
             li.setAttribute('tabindex', '0');
-            li.setAttribute('role', 'button');
+            li.setAttribute('role', 'option');
             const name = li.querySelector('.route-name');
             if (name && !li.getAttribute('aria-label')) {
                 li.setAttribute('aria-label', collapseText(name));
@@ -337,7 +395,13 @@
             for (let i = 0; i < mutations.length; i++) {
                 const m = mutations[i];
                 if (m.type === 'childList' && m.addedNodes.length) needHarden = true;
-                if (m.type === 'attributes') {}
+                if (m.type === 'attributes' && m.target.id === 'searchDropdown') {
+                    var input = document.getElementById('searchInput');
+                    if (input) {
+                        input.setAttribute('aria-expanded',
+                            m.target.classList.contains('active') ? 'true' : 'false');
+                    }
+                }
             }
             if (needHarden) hardenPass(document);
             evaluateOverlays();
@@ -356,9 +420,13 @@
         addSkipLink();
         hardenPass(document);
         startObserver();
+        initDarkMode();
 
         document.addEventListener('keydown', handleActivationKeydown, true);
         document.addEventListener('keydown', handleGlobalKeydown, true);
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.theme-toggle-btn')) toggleTheme();
+        }, false);
 
         setTimeout(function () { labelVLibras(document); }, 1500);
         setTimeout(function () { labelVLibras(document); }, 4000);
@@ -369,4 +437,6 @@
     } else {
         init();
     }
+
+    window.a11yAnnounce = announce;
 })();
