@@ -1123,22 +1123,60 @@ function renderSearchDropdown(query = '') {
         });
     } else {
         dropdownHeader.innerText = "Resultados da Busca";
-        const matches = busRoutes.filter(r => r.name.toLowerCase().includes(query));
+
+        const enterpriseMatch = busRoutes.filter(r =>
+            r.enterprise && r.enterprise.toLowerCase().includes(query)
+        );
+        const nameMatch = busRoutes.filter(r =>
+            r.name.toLowerCase().includes(query) &&
+            !enterpriseMatch.includes(r)
+        );
+        const matches = [...enterpriseMatch, ...nameMatch];
+
         if (matches.length === 0) {
             dropdownList.innerHTML = `<li style="justify-content:center; color:#888;">Nenhuma rota encontrada :/</li>`;
             searchDropdown.classList.add('active');
             return;
-        } else {
-            matches.forEach(route => {
+        }
+
+        // If results include enterprise matches, show a header label for them
+        if (enterpriseMatch.length > 0) {
+            const groupHeader = document.createElement('li');
+            groupHeader.className = 'dropdown-group-header';
+            groupHeader.innerHTML = `<i class="fa-solid fa-building"></i> Empresa: ${enterpriseMatch[0].enterprise}`;
+            groupHeader.style.cssText = 'pointer-events:none; color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; padding: 6px 14px 2px; gap:6px;';
+            fragment.appendChild(groupHeader);
+
+            enterpriseMatch.forEach(route => {
                 const li = document.createElement('li');
                 li.dataset.routeId = route.id;
                 li.innerHTML = `
                     <div class="route-color-dot" style="background:${route.color}"></div>
                     <span class="route-name">${route.name}</span>
+                    <span style="margin-left:auto; font-size:0.7rem; color:#94a3b8; white-space:nowrap;">${route.enterprise}</span>
                 `;
                 fragment.appendChild(li);
             });
+
+            if (nameMatch.length > 0) {
+                const sep = document.createElement('li');
+                sep.className = 'dropdown-group-header';
+                sep.innerHTML = `<i class="fa-solid fa-route"></i> Outras rotas`;
+                sep.style.cssText = 'pointer-events:none; color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; padding: 6px 14px 2px; gap:6px; border-top:1px solid rgba(0,0,0,0.06); margin-top:4px;';
+                fragment.appendChild(sep);
+            }
         }
+
+        nameMatch.forEach(route => {
+            const li = document.createElement('li');
+            li.dataset.routeId = route.id;
+            li.innerHTML = `
+                <div class="route-color-dot" style="background:${route.color}"></div>
+                <span class="route-name">${route.name}</span>
+                <span style="margin-left:auto; font-size:0.7rem; color:#94a3b8; white-space:nowrap;">${route.enterprise || ''}</span>
+            `;
+            fragment.appendChild(li);
+        });
     }
 
     dropdownList.appendChild(fragment);
