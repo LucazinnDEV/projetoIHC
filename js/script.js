@@ -1024,6 +1024,15 @@ function initUI() {
             document.body.classList.add('chat-open');
             chatInput.focus();
 
+            // Hide floating controls on mobile when chat opens
+            const floatingControls = document.querySelector('.floating-controls');
+            const isMobile = window.innerWidth <= 768;
+            if (floatingControls && isMobile) {
+                floatingControls.style.pointerEvents = 'none';
+                floatingControls.style.opacity = '0';
+                floatingControls.style.transition = 'opacity 0.3s ease';
+            }
+
             // Personalize greeting if name is set
             const userData = localStorage.getItem(STORAGE_KEY_USER);
             if (userData) {
@@ -1044,6 +1053,14 @@ function initUI() {
         closeChatBtn.addEventListener('click', () => {
             chatAssistant.classList.remove('active');
             document.body.classList.remove('chat-open');
+
+            // Restore floating controls on mobile when chat closes
+            const floatingControls = document.querySelector('.floating-controls');
+            const isMobile = window.innerWidth <= 768;
+            if (floatingControls && isMobile) {
+                floatingControls.style.pointerEvents = 'auto';
+                floatingControls.style.opacity = '1';
+            }
         });
     }
 
