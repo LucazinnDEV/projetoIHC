@@ -465,6 +465,24 @@ function closeInfoSidebar() {
     sidebar.classList.remove('minimized');
     isInfoSidebarActive = false;
     isInfoSidebarMinimized = false;
+
+    // Clear the selected route visual elements
+    if (currentSelectedRoute) {
+        currentSelectedRoute = null;
+
+        // Hide the polylines
+        Object.values(routeLayers).forEach(({ polylineGo, polylineReturn, returnColor, data }) => {
+            polylineGo.setStyle({ color: data.color, weight: 4, opacity: 0 });
+            polylineReturn.setStyle({ color: returnColor, weight: 4, opacity: 0 });
+        });
+
+        // Clear highlights and stop markers
+        highlightedLayerGroup.clearLayers();
+        clearRouteStopMarkers();
+
+        // Restore user and nearby markers
+        restoreUserAndNearbyMarkers();
+    }
 }
 
 function minimizeInfoSidebar() {
