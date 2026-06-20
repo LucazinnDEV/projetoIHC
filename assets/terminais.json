@@ -23,7 +23,8 @@
         "integration_place": "Estação Joana Bezerra",
         "bus_here": [
             { "id": "021" },
-            { "id": "026" }
+            { "id": "026" },
+            { "id": "080" }
         ],
         "other_info": "Possui banheiros, lanchonetes próximas e wifi gratuito.",
         "images": [
