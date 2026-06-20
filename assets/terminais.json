@@ -90,5 +90,20 @@
         "images": [
             "assets/imgs/terminals/terminal-de-torre-frente.png"
         ]
+    },
+    {
+        "id": 7,
+        "name": "Terminal de Cavaleiro",
+        "lat": -8.082322,
+        "lng": -34.9772043,
+        "integration": false,
+        "integration_place": "-",
+        "bus_here": [
+            { "id": "232" }
+        ],
+        "other_info": "Não possui banheiros, mas possui acesso à comunidade local.",
+        "images": [
+            "assets/imgs/terminals/terminal-de-cavaleiro.png"
+        ]
     }
 ]
