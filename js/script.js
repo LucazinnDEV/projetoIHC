@@ -477,6 +477,12 @@ function closeInfoSidebar() {
     isInfoSidebarActive = false;
     isInfoSidebarMinimized = false;
 
+    // Clear search bar when closing info panel
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    if (clearSearchBtn) clearSearchBtn.style.display = 'none';
+
     // Clear the selected route visual elements
     if (currentSelectedRoute) {
         currentSelectedRoute = null;
