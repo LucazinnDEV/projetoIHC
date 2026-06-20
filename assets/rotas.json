@@ -6217,7 +6217,8 @@
     "integration": false,
     "integration_place": "-",
     "images": [
-      "assets/imgs/bus/414/414-frente.png"
+      "assets/imgs/bus/232/232-frente.png",
+      "assets/imgs/bus/232/cavaleiro-pcr-frente.jpg"
     ]
   },
   {
